@@ -1,9 +1,9 @@
 import React from 'react';
 import { 
-  Mail, Download, Sparkles, Shield, Monitor, ExternalLink, FileArchive, 
-  FolderOpen, Upload, ArrowLeft, Heart, Clock, Palette, Coffee, Zap
+  Download, Sparkles, Shield, Monitor, ExternalLink, FileArchive, 
+  FolderOpen, ArrowLeft, Heart, Clock, Palette, Coffee, Zap
 } from 'lucide-react';
-import { FaTwitter, FaGithub, FaDiscord } from 'react-icons/fa';
+import { FaTwitter, FaGithub } from 'react-icons/fa';
 
 /* ─── NAV ─── */
 function Navbar({ setPage, currentPage }: { setPage: (p: string) => void, currentPage: string }) {

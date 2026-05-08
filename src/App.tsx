@@ -1,11 +1,9 @@
 import React from 'react';
 import { 
-  Mail, Download, Sparkles, Shield, Coins, MessageCircle, Zap, 
-  ChevronRight, Apple, Monitor, ExternalLink, FileArchive, 
-  FolderOpen, Upload, ArrowLeft 
+  Mail, Download, Sparkles, Shield, Monitor, ExternalLink, FileArchive, 
+  FolderOpen, Upload, ArrowLeft, Heart, Clock, Palette, Coffee, Zap
 } from 'lucide-react';
 import { FaTwitter, FaGithub, FaDiscord } from 'react-icons/fa';
-import { SiSui } from 'react-icons/si';
 
 /* ─── NAV ─── */
 function Navbar({ setPage, currentPage }: { setPage: (p: string) => void, currentPage: string }) {
@@ -19,10 +17,10 @@ function Navbar({ setPage, currentPage }: { setPage: (p: string) => void, curren
           <div className="w-7 h-7 rounded-lg bg-[#0F172A] flex items-center justify-center">
             <span className="text-white text-[10px]">🐾</span>
           </div>
-          <span className="font-grotesk text-[14px] uppercase tracking-widest text-[#0F172A]">MiniPet</span>
+          <span className="font-grotesk text-[14px] font-bold text-[#0F172A]">MiniPet</span>
         </div>
         <div className="hidden md:flex gap-8">
-          {['Features', 'Gallery', 'NFT', 'Docs'].map(l => (
+          {['Features', 'Gallery', 'Productivity', 'Docs'].map(l => (
             <button 
               key={l} 
               onClick={() => {
@@ -34,7 +32,7 @@ function Navbar({ setPage, currentPage }: { setPage: (p: string) => void, curren
                   }, 100);
                 }
               }}
-              className={`font-grotesk text-[12px] uppercase tracking-wider transition-colors ${
+              className={`font-grotesk text-[13px] font-medium transition-colors ${
                 (currentPage === 'docs' && l === 'Docs') || (currentPage === 'home' && l !== 'Docs')
                   ? 'text-[#10B981]' 
                   : 'text-[#475569] hover:text-[#10B981]'
@@ -68,12 +66,11 @@ function Hero() {
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      // Fade out
       setVisible(false);
       setTimeout(() => {
         setIdx(prev => (prev + 1) % HERO_PETS.length);
         setVisible(true);
-      }, 400); // wait for fade-out, then swap
+      }, 400);
     }, 3200);
     return () => clearInterval(timer);
   }, []);
@@ -82,54 +79,59 @@ function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-24">
-      {/* BG blobs */}
-      <div className="absolute top-[-15%] right-[-10%] w-[700px] h-[700px] rounded-full bg-emerald-100/50 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-8%] w-[500px] h-[500px] rounded-full bg-sky-100/40 blur-3xl pointer-events-none" />
-      <div className="absolute top-[30%] left-[40%] w-[300px] h-[300px] rounded-full bg-violet-100/30 blur-2xl pointer-events-none" />
+      {/* Dynamic Background Blobs */}
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-teal-100/30 rounded-full blur-[120px] animate-float" />
+      <div className="absolute bottom-[5%] left-[-10%] w-[500px] h-[500px] bg-orange-100/30 rounded-full blur-[100px] animate-float" style={{ animationDelay: '-3s' }} />
+      <div className="absolute top-[20%] left-[30%] w-[300px] h-[300px] bg-emerald-50/40 rounded-full blur-[80px] animate-float" style={{ animationDelay: '-1.5s' }} />
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
-        {/* Left */}
         <div>
           <div className="pill pill-green mb-6">
             <Sparkles size={11} />
-            On SUI Blockchain
+            Best Desktop Companion
           </div>
 
-          <h1 className="font-grotesk text-[clamp(52px,7vw,96px)] uppercase leading-[0.92] text-[#0F172A] mb-6">
-            Your pet<br />
-            lives on<br />
-            <span className="text-[#10B981]">your</span> screen
+          <h1 className="font-grotesk text-[clamp(52px,7.5vw,92px)] font-bold leading-[1.05] text-[#1C1917] mb-8">
+            <span className="text-gradient block">Your pet lives</span>
+            on <span className="text-[#0D9488] relative">
+              your
+              <span className="absolute -bottom-2 left-0 w-full h-2 bg-[#0D9488]/10 rounded-full blur-sm" />
+            </span> screen
           </h1>
 
-          <p className="font-mono text-[14px] text-[#475569] max-w-[420px] leading-relaxed uppercase mb-10">
-            MiniPet is a desktop companion app powered by SUI blockchain. Your pet walks, talks, and reacts in real-time — and is truly yours as an NFT.
+          <p className="font-mono text-[14px] text-[#475569] max-w-[420px] leading-relaxed mb-10">
+            MiniPet is a lightweight desktop app that brings a cute pixel companion to your workspace. They walk, talk, and react while you work.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-10">
-            <a href="#download" className="btn-download">
-              <Apple size={16} /> macOS
-            </a>
-            <a href="#download" className="btn-download">
-              <Monitor size={16} /> Windows
+            <a href="#download" className="btn-download px-8 py-4">
+              <Download size={18} /> Get MiniPet Free
             </a>
             <a href="https://github.com/helloquocbao/mini-pet" target="_blank" rel="noreferrer" className="btn-download-outline">
-              <FaGithub size={16} /> GitHub
+              <FaGithub size={16} /> Source Code
             </a>
           </div>
 
-          <div className="flex items-center gap-6 text-[12px] font-mono text-[#94A3B8] uppercase">
-            <span>✓ Free forever</span>
-            <span>✓ No account needed</span>
-            <span>✓ Open source</span>
+          <div className="flex items-center gap-6 text-[12px] font-mono text-[#94A3B8]">
+            <span>✓ No Ads</span>
+            <span>✓ No Account Needed</span>
+            <span>✓ 100% Privacy</span>
           </div>
         </div>
 
-        {/* Right – Single pet showcase, cycling */}
-        <div className="relative flex justify-center items-center h-[520px] select-none">
+        <div className="relative flex justify-center items-center h-[600px] select-none">
+          {/* Floating Pixels */}
+          <div className="absolute top-10 right-10 w-4 h-4 bg-[#0D9488]/20 animate-pixel" />
+          <div className="absolute bottom-20 left-10 w-6 h-6 bg-orange-200/30 animate-pixel" style={{ animationDelay: '-2s' }} />
+          <div className="absolute top-1/2 -left-10 w-3 h-3 bg-teal-300/20 animate-pixel" style={{ animationDelay: '-4s' }} />
+          <div className="absolute top-20 right-1/4 w-5 h-5 bg-purple-200/20 animate-pixel" style={{ animationDelay: '-1s' }} />
 
-          {/* Pet stage */}
+          {/* Glowing Aura behind pet */}
+          <div className="absolute w-[450px] h-[450px] rounded-full opacity-30 blur-[120px] transition-colors duration-1000" 
+               style={{ background: pet.color }} />
+          
           <div
-            className="relative flex items-end justify-center w-[280px] h-[280px] rounded-[40px] transition-all duration-400"
+            className="relative flex items-end justify-center w-[320px] h-[320px] rounded-[60px] stage-glow"
             style={{
               background: `radial-gradient(ellipse at 60% 80%, ${pet.color}22 0%, transparent 70%)`,
               opacity: visible ? 1 : 0,
@@ -143,30 +145,22 @@ function Hero() {
             />
           </div>
 
-          {/* Pet info card – top left */}
           <div
             className="absolute top-6 left-0 liquid-glass rounded-2xl px-4 py-3 text-left z-30"
-            style={{
-              opacity: visible ? 1 : 0,
-              transition: 'opacity 0.3s ease 0.1s',
-            }}
+            style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease 0.1s' }}
           >
-            <div className="text-[10px] font-mono uppercase text-[#94A3B8] mb-1">Active Pet</div>
+            <div className="text-[10px] font-mono text-[#94A3B8] mb-1">Active Pet</div>
             <div className="font-grotesk text-[14px] text-[#0F172A]">{pet.emoji} {pet.name}</div>
             <div className="text-[10px] font-mono" style={{ color: pet.color }}>
-              {pet.rarity} · Lv.{pet.level}
+              {pet.rarity} · Level {pet.level}
             </div>
           </div>
 
-          {/* Happiness bar – bottom right */}
           <div
             className="absolute bottom-6 right-0 liquid-glass rounded-2xl px-4 py-3 text-left z-30"
-            style={{
-              opacity: visible ? 1 : 0,
-              transition: 'opacity 0.3s ease 0.15s',
-            }}
+            style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease 0.15s' }}
           >
-            <div className="text-[10px] font-mono uppercase text-[#94A3B8] mb-2">Happiness</div>
+            <div className="text-[10px] font-mono text-[#94A3B8] mb-2">Happiness</div>
             <div className="flex items-center gap-2">
               <div className="w-24 h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
                 <div
@@ -176,22 +170,6 @@ function Hero() {
               </div>
               <span className="font-grotesk text-[13px] text-[#0F172A]">{pet.happy}%</span>
             </div>
-          </div>
-
-          {/* Dot indicators */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
-            {HERO_PETS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => { setVisible(false); setTimeout(() => { setIdx(i); setVisible(true); }, 300); }}
-                className="transition-all duration-300 rounded-full"
-                style={{
-                  width: i === idx ? 20 : 8,
-                  height: 8,
-                  background: i === idx ? '#10B981' : '#CBD5E1',
-                }}
-              />
-            ))}
           </div>
         </div>
       </div>
@@ -204,56 +182,55 @@ function Features() {
   const feats = [
     {
       icon: <Monitor size={22} className="text-[#0F172A]" />,
-      title: 'Desktop Companion',
-      desc: 'Your pet lives directly on your screen — draggable, interactive, always with you while you work.',
+      title: 'Desktop Overlay',
+      desc: 'Your pet lives on top of all windows. Drag them anywhere, or let them wander around your screen.',
     },
     {
-      icon: <SiSui size={20} className="text-[#4DA2FF]" />,
-      title: 'SUI NFT Ownership',
-      desc: 'Mint your pet on-chain as a true NFT. Trade, gift, or flex — it\'s verifiably yours on SUI Network.',
+      icon: <Clock size={22} className="text-[#10B981]" />,
+      title: 'Pomodoro Timer',
+      desc: 'Stay focused with an integrated Pomodoro timer. Your pet will remind you when it\'s time to break.',
     },
     {
-      icon: <Coins size={22} className="text-[#10B981]" />,
-      title: 'PET Token Economy',
-      desc: 'Earn MMOT tokens and use them to bonk friend\'s pets or unlock special interactions.',
+      icon: <Palette size={22} className="text-[#F59E0B]" />,
+      title: 'Customizable Skins',
+      desc: 'Choose from our built-in collection or import your own pixel art pets from the community.',
     },
     {
-      icon: <MessageCircle size={22} className="text-[#8B5CF6]" />,
-      title: 'Social Interactions',
-      desc: 'Send SUI gifts, bonk a friend\'s pet, or drop a message — all recorded on-chain. Their pet will visit you!',
+      icon: <Zap size={22} className="text-[#8B5CF6]" />,
+      title: 'Context Awareness',
+      desc: 'Your pet reacts to what you do! They\'ll cheer you on while coding or chill while you watch videos.',
     },
     {
-      icon: <Zap size={22} className="text-[#F59E0B]" />,
-      title: 'Visitor Animations',
-      desc: 'When someone gifts you on-chain, a visitor pet walks across your desktop bearing the news.',
+      icon: <Heart size={22} className="text-[#EC4899]" />,
+      title: 'Interaction System',
+      desc: 'Feed, pet, and play with your companion. Their happiness and level grow as you spend time together.',
     },
     {
-      icon: <Shield size={22} className="text-[#EC4899]" />,
-      title: 'zkLogin Wallet',
-      desc: 'Sign in with Google, no seed phrase required. MiniPet uses SUI zkLogin for seamless Web3 onboarding.',
+      icon: <Shield size={22} className="text-[#4DA2FF]" />,
+      title: 'Offline & Private',
+      desc: 'No cloud, no accounts, no tracking. All your pet data stays safely on your local computer.',
     },
   ];
 
   return (
     <section id="features" className="w-full py-24 lg:py-32 bg-white">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <div className="section-divider mb-4" />
-          <h2 className="font-grotesk text-[clamp(40px,5vw,64px)] uppercase leading-[0.95] text-[#0F172A]">
-            Everything your<br /><span className="text-[#10B981]">pet needs</span>
+          <h2 className="font-grotesk text-[clamp(36px,5vw,56px)] font-bold leading-[1.1] text-[#0F172A]">
+            Everything your <span className="text-[#0D9488] relative">
+              pet needs
+              <Sparkles className="absolute -top-6 -right-8 text-[#0D9488]/40 animate-pulse" size={32} />
+            </span>
           </h2>
         </div>
-        <p className="font-mono text-[13px] uppercase text-[#64748B] max-w-[500px] mb-16 leading-relaxed">
-          From pixel art animations to on-chain social gifts, MiniPet is the most feature-complete desktop pet on the planet.
-        </p>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-16">
           {feats.map(f => (
             <div key={f.title} className="feature-card">
               <div className="w-10 h-10 rounded-xl bg-[#F8FAFC] flex items-center justify-center mb-4">
                 {f.icon}
               </div>
-              <div className="font-grotesk text-[16px] uppercase text-[#0F172A] mb-2">{f.title}</div>
+              <div className="font-grotesk text-[16px] font-bold text-[#0F172A] mb-2">{f.title}</div>
               <p className="font-mono text-[12px] text-[#64748B] leading-relaxed">{f.desc}</p>
             </div>
           ))}
@@ -263,7 +240,7 @@ function Features() {
   );
 }
 
-/* ─── PET GALLERY ─── */
+/* ─── GALLERY ─── */
 function Gallery() {
   const pets = [
     { cls: 'sprite-idle',  name: 'Wukong',    rarity: 'Legendary', score: '9.8', tag: 'pill-green' },
@@ -272,44 +249,32 @@ function Gallery() {
   ];
 
   return (
-    <section id="gallery" className="w-full py-24 lg:py-32 bg-[#F8FAFC]">
+    <section id="gallery" className="w-full py-24 lg:py-32 bg-[#F5F5F4]">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-14 gap-6">
           <div>
             <div className="section-divider mb-4" />
-            <h2 className="font-grotesk text-[clamp(36px,4.5vw,60px)] uppercase leading-[0.95] text-[#0F172A]">
-              Pet<br /><span className="text-[#10B981]">Collection</span>
+            <h2 className="font-grotesk text-[clamp(32px,4.5vw,52px)] font-bold leading-[1.1] text-[#0F172A]">
+              Pet <span className="text-[#10B981]">Collection</span>
             </h2>
           </div>
-          <div className="font-mono text-[12px] uppercase text-[#64748B] max-w-[280px] text-right leading-relaxed hidden lg:block">
-            Each pet is a unique pixel art companion. Mint as NFT, gift to friends, or collect them all.
-          </div>
         </div>
-
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {pets.map(pet => (
             <div key={pet.name} className="liquid-glass rounded-[28px] p-4 hover:shadow-xl transition-all duration-300 cursor-pointer group">
-              {/* Sprite canvas */}
               <div className="relative w-full pb-[90%] rounded-[20px] overflow-hidden bg-gradient-to-b from-[#F0FDF4] to-[#ECFDF5]">
                 <div className="absolute inset-0 flex items-end justify-center pb-4">
                   <div className={`sprite ${pet.cls}`} style={{ transform: 'scale(1.8)', transformOrigin: 'bottom center' }} />
                 </div>
-                {/* Rarity badge */}
                 <div className="absolute top-3 left-3">
                   <span className={`pill ${pet.tag}`}>{pet.rarity}</span>
                 </div>
               </div>
-
-              {/* Info bar */}
               <div className="liquid-glass mt-3 rounded-[16px] px-4 py-3 flex items-center justify-between">
                 <div>
                   <div className="font-grotesk text-[15px] text-[#0F172A]">{pet.name}</div>
-                  <div className="font-mono text-[11px] text-[#64748B] uppercase">Score: {pet.score}/10</div>
+                  <div className="font-mono text-[11px] text-[#64748B]">Loyalty: {pet.score}/10</div>
                 </div>
-                <button className="w-10 h-10 rounded-full bg-[#0F172A] flex items-center justify-center hover:scale-110 transition-transform text-white shadow-md">
-                  <ChevronRight size={18} />
-                </button>
               </div>
             </div>
           ))}
@@ -319,144 +284,53 @@ function Gallery() {
   );
 }
 
-/* ─── HOW IT WORKS ─── */
-function HowItWorks() {
-  const steps = [
-    { n: '01', title: 'Download the App', desc: 'Install MiniPet for macOS or Windows. Free, no account needed.' },
-    { n: '02', title: 'Connect or Create Wallet', desc: 'Use zkLogin (Google Sign-In) — no seed phrases, no crypto knowledge required.' },
-    { n: '03', title: 'Pick Your Pet', desc: 'Choose from the built-in collection or import custom pixel art pets.' },
-    { n: '04', title: 'Go On-Chain', desc: 'Mint your pet as a SUI NFT. Send gifts, bonk friends, earn MMOT tokens.' },
-  ];
-
+/* ─── PRODUCTIVITY ─── */
+function ProductivitySection() {
   return (
-    <section id="how-it-works" className="w-full py-24 lg:py-32 bg-[#0F172A] text-white">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="mb-14">
-          <div className="w-12 h-1 bg-[#10B981] rounded-full mb-4" />
-          <h2 className="font-grotesk text-[clamp(36px,5vw,64px)] uppercase leading-[0.95]">
-            How it <span className="text-[#10B981]">works</span>
-          </h2>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map(s => (
-            <div key={s.n} className="relative">
-              <div className="font-grotesk text-[64px] text-white/5 leading-none mb-2">{s.n}</div>
-              <div className="font-grotesk text-[18px] uppercase text-white mb-2">{s.title}</div>
-              <p className="font-mono text-[12px] text-white/50 leading-relaxed uppercase">{s.desc}</p>
-              <div className="mt-4 w-8 h-[2px] bg-[#10B981]" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── BLOCKCHAIN SECTION ─── */
-function BlockchainSection() {
-  return (
-    <section id="nft" className="w-full py-24 lg:py-32 bg-white overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
-        {/* Left – visual */}
+    <section id="productivity" className="w-full py-24 lg:py-32 bg-white overflow-hidden relative">
+      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-emerald-50/50 rounded-full blur-[120px] -translate-x-1/2" />
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <div className="relative flex justify-center">
           <div className="relative w-[340px] h-[340px]">
-            {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-200 animate-[spin_20s_linear_infinite]" />
-            {/* Inner glass card */}
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-200 animate-[spin_30s_linear_infinite]" />
             <div className="absolute inset-[15%] liquid-glass rounded-3xl flex flex-col items-center justify-center p-6 gap-3">
               <div className="sprite sprite-happy" style={{ transform: 'scale(1.5)', transformOrigin: 'center' }} />
               <div className="text-center mt-4">
-                <div className="font-grotesk text-[14px] uppercase text-[#0F172A]">Gift Received!</div>
-                <div className="font-mono text-[11px] text-[#10B981] uppercase">+0.5 SUI from 0xA3f…</div>
+                <div className="font-grotesk text-[14px] font-bold text-[#0F172A]">Break Time!</div>
+                <div className="font-mono text-[11px] text-[#10B981]">25m focus complete</div>
               </div>
             </div>
-            {/* Orbit dots */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#4DA2FF] flex items-center justify-center shadow-lg shadow-blue-200">
-              <SiSui size={14} className="text-white" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#10B981] flex items-center justify-center shadow-lg shadow-emerald-200 text-white">
+              <Clock size={14} />
             </div>
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full bg-[#10B981] flex items-center justify-center shadow-lg shadow-emerald-200">
-              <Coins size={14} className="text-white" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full bg-[#F59E0B] flex items-center justify-center shadow-lg shadow-orange-200 text-white">
+              <Coffee size={14} />
             </div>
           </div>
         </div>
-
-        {/* Right – text */}
         <div>
           <div className="section-divider mb-4" />
-          <h2 className="font-grotesk text-[clamp(36px,4.5vw,58px)] uppercase leading-[0.95] text-[#0F172A] mb-6">
-            Social interactions<br /><span className="text-[#10B981]">on-chain</span>
+          <h2 className="font-grotesk text-[clamp(32px,4.5vw,52px)] font-bold leading-[1.1] text-[#0F172A] mb-6">
+            Focus better <span className="text-[#10B981]">with MiniPet</span>
           </h2>
-          <p className="font-mono text-[13px] uppercase text-[#475569] leading-relaxed mb-8 max-w-[440px]">
-            Send SUI gifts, bonk your friend's pet with MMOT tokens, or drop a message — all recorded permanently on SUI blockchain. When someone sends you a gift, their pet visits your desktop to deliver it.
+          <p className="font-mono text-[13px] text-[#475569] leading-relaxed mb-8 max-w-[440px]">
+            MiniPet isn't just a toy. It's a productivity companion that uses the Pomodoro technique to help you stay focused while keeping you entertained with subtle, non-distracting animations.
           </p>
           <div className="flex flex-col gap-3">
             {[
-              { icon: '🎁', action: 'Send Gift', desc: 'Transfer SUI with a personal message' },
-              { icon: '👊', action: 'Bonk!', desc: 'Spend 100 MMOT to bonk a friend\'s pet' },
-              { icon: '💬', action: 'Message', desc: 'Send a text message on-chain' },
+              { icon: '⏱️', action: 'Pomodoro Timer', desc: 'Customizable work/break intervals' },
+              { icon: '🔔', action: 'Smart Reminders', desc: 'Stretch and hydration alerts' },
+              { icon: '📈', action: 'Focus Stats', desc: 'Track your productivity daily' },
             ].map(item => (
               <div key={item.action} className="flex items-center gap-4 p-4 rounded-2xl bg-[#F8FAFC] hover:bg-[#F0FDF4] transition-colors">
                 <span className="text-2xl">{item.icon}</span>
                 <div>
-                  <div className="font-grotesk text-[13px] uppercase text-[#0F172A]">{item.action}</div>
-                  <div className="font-mono text-[11px] text-[#64748B] uppercase">{item.desc}</div>
+                  <div className="font-grotesk text-[13px] font-bold text-[#0F172A]">{item.action}</div>
+                  <div className="font-mono text-[11px] text-[#64748B]">{item.desc}</div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── DOWNLOAD CTA ─── */
-function DownloadCTA() {
-  return (
-    <section id="download" className="w-full py-24 lg:py-32 bg-gradient-to-br from-[#0F172A] via-[#0F172A] to-[#1a2744] relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-sky-500/5 blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 text-center">
-        <div className="flex justify-center mb-6">
-          <span className="pill" style={{ background: 'rgba(16,185,129,0.15)', color: '#10B981' }}>
-            <Download size={11} /> Free Download
-          </span>
-        </div>
-
-        <h2 className="font-grotesk text-[clamp(48px,7vw,96px)] uppercase leading-[0.92] text-white mb-6">
-          Get your<br />
-          <span className="text-[#10B981]">MiniPet</span><br />
-          today
-        </h2>
-
-        <p className="font-mono text-[13px] uppercase text-white/40 max-w-[440px] mx-auto leading-relaxed mb-12">
-          Download for free. No setup, no account. Just install and your pet appears on your desktop.
-        </p>
-
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          <a href="#" className="btn-download" style={{ background: 'white', color: '#0F172A' }}>
-            <Apple size={18} /> Download for macOS
-          </a>
-          <a href="#" className="btn-download" style={{ background: 'white', color: '#0F172A' }}>
-            <Monitor size={18} /> Download for Windows
-          </a>
-        </div>
-
-        <div className="flex justify-center items-center gap-4 text-white/30">
-          <a href="mailto:lehoquocbao9@gmail.com" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white/30 hover:text-white/60 transition-all">
-            <Mail size={16} />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white/30 hover:text-white/60 transition-all">
-            <FaTwitter size={16} />
-          </a>
-          <a href="https://github.com/helloquocbao/mini-pet" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white/30 hover:text-white/60 transition-all">
-            <FaGithub size={16} />
-          </a>
-          <a href="https://discord.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white/30 hover:text-white/60 transition-all">
-            <FaDiscord size={16} />
-          </a>
         </div>
       </div>
     </section>
@@ -476,41 +350,28 @@ function DocsPage({ setPage }: { setPage: (p: string) => void }) {
     {
       icon: <FileArchive size={24} />,
       title: "Download as ZIP",
-      desc: "Once you find a pet you like, click the 'Download as ZIP' button. This package contains all the sprite assets and metadata.",
+      desc: "Once you find a pet you like, click the 'Download as ZIP' button.",
     },
     {
       icon: <FolderOpen size={24} />,
-      title: "Extract the File",
-      desc: "Locate the downloaded .zip file on your computer and extract (unzip) it into a new folder.",
-    },
-    {
-      icon: <Upload size={24} />,
-      title: "Import to MiniPet",
-      desc: "Open your MiniPet desktop app, go to Settings -> Import Pet, and select the folder you just extracted.",
+      title: "Extract & Import",
+      desc: "Extract the .zip and select the folder in MiniPet Settings -> Import Pet.",
     }
   ];
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pt-32 pb-24">
       <div className="max-w-[1000px] mx-auto px-6">
-        <button 
-          onClick={() => setPage('home')}
-          className="flex items-center gap-2 text-[#64748B] hover:text-[#0F172A] transition-colors mb-8 group"
-        >
+        <button onClick={() => setPage('home')} className="flex items-center gap-2 text-[#64748B] hover:text-[#0F172A] mb-8 group">
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="font-grotesk text-[12px] uppercase tracking-wider">Back to Home</span>
+          <span className="font-grotesk text-[12px] font-medium text-[#64748B] group-hover:text-[#0F172A] transition-colors">Back to Home</span>
         </button>
-
         <div className="mb-16">
           <div className="section-divider mb-6" />
-          <h1 className="font-grotesk text-[clamp(40px,6vw,72px)] uppercase leading-[0.95] text-[#0F172A] mb-6">
-            Importing<br /><span className="text-[#10B981]">Custom Pets</span>
+          <h1 className="font-grotesk text-[clamp(36px,6vw,64px)] font-bold leading-[1.1] text-[#0F172A] mb-6">
+            Custom <span className="text-[#10B981]">Pet Guide</span>
           </h1>
-          <p className="font-mono text-[14px] text-[#64748B] max-w-[600px] leading-relaxed uppercase">
-            MiniPet allows you to import any pet from the PetDex community. Follow these simple steps to bring a new friend to your desktop.
-          </p>
         </div>
-
         <div className="grid gap-6">
           {steps.map((s, i) => (
             <div key={i} className="liquid-glass rounded-[32px] p-8 flex flex-col md:flex-row gap-8 items-start">
@@ -519,38 +380,18 @@ function DocsPage({ setPage }: { setPage: (p: string) => void }) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="font-grotesk text-[12px] text-[#10B981] bg-emerald-50 px-2 py-0.5 rounded">STEP {i+1}</span>
-                  <h3 className="font-grotesk text-[20px] uppercase text-[#0F172A]">{s.title}</h3>
+                  <span className="font-grotesk text-[11px] font-bold text-[#10B981] bg-emerald-50 px-2 py-0.5 rounded">Step {i+1}</span>
+                  <h3 className="font-grotesk text-[20px] font-bold text-[#0F172A]">{s.title}</h3>
                 </div>
-                <p className="font-mono text-[13px] text-[#64748B] leading-relaxed mb-6">
-                  {s.desc}
-                </p>
+                <p className="font-mono text-[13px] text-[#64748B] mb-6">{s.desc}</p>
                 {s.link && (
-                  <a 
-                    href={s.link} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="btn-download inline-flex items-center gap-2 py-3 px-6"
-                  >
+                  <a href={s.link} target="_blank" rel="noreferrer" className="btn-download inline-flex items-center gap-2 py-3 px-6">
                     {s.linkText} <ExternalLink size={14} />
                   </a>
                 )}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Pro Tip */}
-        <div className="mt-12 p-8 rounded-[32px] bg-[#0F172A] text-white overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl" />
-          <div className="relative z-10">
-            <div className="font-grotesk text-[12px] uppercase tracking-widest text-[#10B981] mb-2 flex items-center gap-2">
-              <Zap size={14} /> Pro Tip
-            </div>
-            <p className="font-mono text-[13px] text-white/70 leading-relaxed uppercase">
-              You can also drag and drop the extracted folder directly onto your active pet to quickly switch to a new companion!
-            </p>
-          </div>
         </div>
       </div>
     </div>
@@ -560,19 +401,22 @@ function DocsPage({ setPage }: { setPage: (p: string) => void }) {
 /* ─── FOOTER ─── */
 function Footer() {
   return (
-    <footer className="w-full bg-[#0F172A] border-t border-white/5 py-8 px-6 lg:px-12">
-      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <footer className="w-full bg-[#0F172A] border-t border-white/5 py-12 px-6 lg:px-12">
+      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex items-center gap-2">
           <span className="text-white text-sm">🐾</span>
-          <span className="font-grotesk text-[13px] uppercase tracking-widest text-white/60">MiniPet</span>
+          <span className="font-grotesk text-[13px] font-bold text-white/60">MiniPet</span>
         </div>
-        <div className="font-mono text-[11px] uppercase text-white/30">
-          © 2026 MiniPet — Built on SUI Blockchain
+        <div className="flex gap-4">
+          <a href="https://github.com/helloquocbao/mini-pet" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-white/60 transition-all">
+            <FaGithub size={18} />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-white/60 transition-all">
+            <FaTwitter size={18} />
+          </a>
         </div>
-        <div className="flex gap-6">
-          {['Privacy', 'Terms', 'Docs'].map(l => (
-            <a key={l} href="#" className="font-mono text-[11px] uppercase text-white/30 hover:text-white/60 transition-colors">{l}</a>
-          ))}
+        <div className="font-mono text-[11px] text-white/30 text-center md:text-right">
+          © 2026 MiniPet — Purely Offline, Purely Fun
         </div>
       </div>
     </footer>
@@ -588,16 +432,14 @@ export default function App() {
   }, [page]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#FAF9F6]">
       <Navbar setPage={setPage} currentPage={page} />
       {page === 'home' ? (
         <main>
           <Hero />
           <Features />
           <Gallery />
-          <HowItWorks />
-          <BlockchainSection />
-          <DownloadCTA />
+          <ProductivitySection />
         </main>
       ) : (
         <DocsPage setPage={setPage} />

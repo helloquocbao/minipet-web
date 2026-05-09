@@ -450,7 +450,7 @@ function DownloadSection() {
                 </div>
               </div>
               <h3 className="text-[22px] font-black text-[#111827] dark:text-white mb-1">{d.platform}</h3>
-              <p className="text-[14px] text-gray-500 dark:text-gray-400 mb-6">{d.desc}</p>
+              <p className="text-[13px] text-gray-500 dark:text-gray-400 mb-6 sm:whitespace-nowrap">{d.desc}</p>
 
               <div className="w-full pt-6 border-t border-gray-100 dark:border-gray-800">
                 <a

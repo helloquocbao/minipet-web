@@ -49,7 +49,7 @@ const resources = {
       download: {
         title: 'Ready to meet your companion?',
         desc: 'Choose your platform and start your journey with MiniPet today. It\'s free and always will be.',
-        macDesc: 'Compatible with Intel & Apple Silicon',
+        macDesc: 'Supports Intel & Apple Silicon',
         winExeDesc: 'Standard installer for Windows',
         winZipDesc: 'Portable version (No install)',
         btn: 'Download'
@@ -138,7 +138,7 @@ const resources = {
       download: {
         title: 'Sẵn sàng gặp gỡ bạn đồng hành?',
         desc: 'Chọn nền tảng của bạn và bắt đầu hành trình với MiniPet ngay hôm nay. Hoàn toàn miễn phí.',
-        macDesc: 'Tương thích với Intel & Apple Silicon',
+        macDesc: 'Hỗ trợ Intel & Apple Silicon',
         winExeDesc: 'Bản cài đặt tiêu chuẩn cho Windows',
         winZipDesc: 'Bản Portable (Không cần cài đặt)',
         btn: 'Tải về'
@@ -227,7 +227,7 @@ const resources = {
       download: {
         title: '准备好迎接你的伙伴了吗？',
         desc: '选择您的平台，立即开始您的 MiniPet 之旅。它是免费的，而且永远都是。',
-        macDesc: '兼容 Intel 和 Apple Silicon',
+        macDesc: '支持 Intel 和 Apple Silicon',
         winExeDesc: 'Windows 标准安装程序',
         winZipDesc: '便携版（无需安装）',
         btn: '下载'
@@ -316,7 +316,7 @@ const resources = {
       download: {
         title: 'Pronto a incontrare il tuo compagno?',
         desc: 'Scegli la tua piattaforma e inizia oggi il tuo viaggio con MiniPet. È gratis e lo sarà sempre.',
-        macDesc: 'Compatibile con Intel e Apple Silicon',
+        macDesc: 'Supporta Intel e Apple Silicon',
         winExeDesc: 'Installatore standard per Windows',
         winZipDesc: 'Versione portatile (nessuna installazione)',
         btn: 'Scarica'
@@ -405,7 +405,7 @@ const resources = {
       download: {
         title: 'Prêt à rencontrer votre compagnon ?',
         desc: 'Choisissez votre plateforme et commencez votre voyage avec MiniPet aujourd\'hui. C\'est gratuit et le sera toujours.',
-        macDesc: 'Compatible với Intel et Apple Silicon',
+        macDesc: 'Support Intel et Apple Silicon',
         winExeDesc: 'Installateur standard pour Windows',
         winZipDesc: 'Version portable (sans installation)',
         btn: 'Télécharger'

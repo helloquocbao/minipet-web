@@ -101,11 +101,135 @@
   animation: heroFloat 4s ease-in-out infinite;
 }
 @keyframes heroFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-18px); }
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%      { transform: translateY(-15px) scale(1.02); }
 }
 
-/* ── Card ── */
+.shadow-pulse {
+  animation: shadowPulse 4s ease-in-out infinite;
+}
+@keyframes shadowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50%      { transform: scale(0.85); opacity: 0.1; }
+}
+
+/* ── Custom Multi-row Cat Sprite Animation (57 frames) ── */
+.cat-sprite-frame {
+  width: 250px;
+  height: 250px;
+  background-image: url('/cat/spritesheet.png');
+  background-size: 800% 900%; /* 8 columns, 9 rows */
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: catCustomFlow 15s steps(1) infinite;
+  mix-blend-mode: multiply;
+}
+
+@keyframes catCustomFlow {
+  /* Row 1: 6 frames (Normal speed: ~2% per frame) */
+  0% { background-position: 0% 0%; }
+  2% { background-position: 14.28% 0%; }
+  4% { background-position: 28.57% 0%; }
+  6% { background-position: 42.85% 0%; }
+  8% { background-position: 57.14% 0%; }
+  10% { background-position: 71.42% 0%; }
+
+  /* Row 2: 8 frames (FAST speed: 1% per frame) */
+  12% { background-position: 0% 12.5%; }
+  13% { background-position: 14.28% 12.5%; }
+  14% { background-position: 28.57% 12.5%; }
+  15% { background-position: 42.85% 12.5%; }
+  16% { background-position: 57.14% 12.5%; }
+  17% { background-position: 71.42% 12.5%; }
+  18% { background-position: 85.71% 12.5%; }
+  19% { background-position: 100% 12.5%; }
+
+  /* Row 3: 8 frames (FAST speed: 1% per frame) */
+  20% { background-position: 0% 25%; }
+  21% { background-position: 14.28% 25%; }
+  22% { background-position: 28.57% 25%; }
+  23% { background-position: 42.85% 25%; }
+  24% { background-position: 57.14% 25%; }
+  25% { background-position: 71.42% 25%; }
+  26% { background-position: 85.71% 25%; }
+  27% { background-position: 100% 25%; }
+
+  /* Row 4: 4 frames (Normal speed) */
+  29% { background-position: 0% 37.5%; }
+  31% { background-position: 14.28% 37.5%; }
+  33% { background-position: 28.57% 37.5%; }
+  35% { background-position: 42.85% 37.5%; }
+
+  /* Row 5: 5 frames (Normal speed) */
+  37% { background-position: 0% 50%; }
+  39% { background-position: 14.28% 50%; }
+  41% { background-position: 28.57% 50%; }
+  43% { background-position: 42.85% 50%; }
+  45% { background-position: 57.14% 50%; }
+
+  /* Row 6: 8 frames (Normal speed) */
+  47% { background-position: 0% 62.5%; }
+  49% { background-position: 14.28% 62.5%; }
+  51% { background-position: 28.57% 62.5%; }
+  53% { background-position: 42.85% 62.5%; }
+  55% { background-position: 57.14% 62.5%; }
+  57% { background-position: 71.42% 62.5%; }
+  59% { background-position: 85.71% 62.5%; }
+  61% { background-position: 100% 62.5%; }
+
+  /* Row 7: 6 frames (Normal speed) */
+  63% { background-position: 0% 75%; }
+  65% { background-position: 14.28% 75%; }
+  67% { background-position: 28.57% 75%; }
+  69% { background-position: 42.85% 75%; }
+  71% { background-position: 57.14% 75%; }
+  73% { background-position: 71.42% 75%; }
+
+  /* Row 8: 6 frames (Normal speed) */
+  75% { background-position: 0% 87.5%; }
+  77% { background-position: 14.28% 87.5%; }
+  79% { background-position: 28.57% 87.5%; }
+  81% { background-position: 42.85% 87.5%; }
+  83% { background-position: 57.14% 87.5%; }
+  85% { background-position: 71.42% 87.5%; }
+
+  /* Row 9: 6 frames (Normal speed) */
+  87% { background-position: 0% 100%; }
+  89% { background-position: 14.28% 100%; }
+  91% { background-position: 28.57% 100%; }
+  93% { background-position: 42.85% 100%; }
+  95% { background-position: 57.14% 100%; }
+  97% { background-position: 71.42% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.dark .cat-sprite-frame {
+  filter: brightness(1.1);
+}
+/* ── Hero Orb ── */
+.hero-orb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(400px, 100%);
+  height: min(400px, 100vw);
+  border-radius: 50%;
+  background: radial-gradient(ellipse 85% 85% at 50% 55%, 
+    rgba(224, 212, 255, 0.6) 0%, 
+    rgba(240, 216, 255, 0.4) 45%, 
+    rgba(255, 216, 240, 0.3) 75%, 
+    transparent 100%);
+  transition: all 0.5s ease;
+}
+
+.dark .hero-orb {
+  background: radial-gradient(ellipse 85% 85% at 50% 55%, 
+    rgba(49, 46, 129, 0.3) 0%, 
+    rgba(30, 27, 75, 0.2) 45%, 
+    transparent 100%);
+}
+
 .card {
   background: var(--card-bg);
   backdrop-filter: blur(16px);

@@ -3,6 +3,25 @@ import { Download, Clock, ArrowLeft, Check, Sun, Moon, Globe, ChevronDown, Menu,
 import { FaGithub, FaApple, FaWindows } from 'react-icons/fa';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
+
+/* ─── SEO COMPONENT ─── */
+const SEO = () => {
+  const { t, i18n } = useTranslation();
+  return (
+    <Helmet>
+      <html lang={i18n.language} />
+      <title>{t('seo.title')}</title>
+      <meta name="description" content={t('seo.description')} />
+      <meta property="og:title" content={t('seo.title')} />
+      <meta property="og:description" content={t('seo.description')} />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={t('seo.title')} />
+      <meta name="twitter:description" content={t('seo.description')} />
+    </Helmet>
+  );
+};
 
 /* ─── CONTAINER WRAPPER ─── */
 const Container = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
@@ -103,7 +122,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
               </button>
 
               {langOpen && (
-                <div className="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl p-2 z-[60]">
                   {languages.map((lng) => (
                     <button
                       key={lng.code}
@@ -157,7 +176,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
 
         {/* Mobile Navigation Drawer */}
         {menuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl shadow-2xl p-4 animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-auto mx-4">
+          <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl shadow-2xl p-4 pointer-events-auto mx-4 z-[60]">
             <div className="flex flex-col gap-2">
               {[t('nav.features'), t('nav.docs')].map((l) => (
                 <button
@@ -236,24 +255,13 @@ function Hero() {
 
           {/* Right — pet image */}
           <div className="relative flex justify-center items-center order-1 md:order-2 py-4">
-            {/* Outer ambient glow */}
-            <div className="absolute inset-[-30%] bg-gradient-to-tr from-blue-300/30 via-purple-300/20 to-pink-300/30 blur-[100px] rounded-full" />
-            {/* Circular gradient orb that pet blends into */}
-            <div
-              className="relative flex items-center justify-center"
-              style={{
-                background: 'radial-gradient(ellipse 90% 90% at 50% 55%, #e0d4ff 0%, #f0d8ff 45%, #ffd8f0 75%, transparent 100%)',
-                width: 'min(460px, 100%)',
-                height: 'min(460px, 100vw)',
-                borderRadius: '50%',
-              }}
-            >
-              <img
-                src="/hero-pet-new.png"
-                alt="MiniPet Astronaut companion"
-                className=" object-contain hero-float"
-                style={{ mixBlendMode: 'multiply' }}
-              />
+            {/* Outer ambient glow (Moved to back) */}
+            <div className="absolute inset-[-30%] bg-gradient-to-tr from-blue-300/30 via-purple-300/20 to-pink-300/30 blur-[100px] rounded-full z-0" />
+            
+            {/* Circular gradient orb */}
+            <div className="hero-orb z-10">
+              {/* Animated Cat Sprite Frame - TOP LAYER */}
+              <div className="cat-sprite-frame relative z-20 transition-transform duration-500 hover:scale-110" />
             </div>
           </div>
         </div>
@@ -397,7 +405,7 @@ function DownloadSection() {
       icon: <FaApple size={28} />,
       version: 'v1.0.0',
       ext: '.dmg',
-      link: '#',
+      link: 'https://github.com/helloquocbao/mini-pet/releases/download/v1.0.0/MiniPet-v1.0.0.dmg',
       desc: t('download.macDesc'),
       color: 'bg-gray-100 dark:bg-gray-800'
     },
@@ -406,7 +414,7 @@ function DownloadSection() {
       icon: <FaWindows size={28} />,
       version: 'v1.0.0',
       ext: '.exe',
-      link: '#',
+      link: 'https://github.com/helloquocbao/mini-pet/releases/download/v1.0.0/MiniPet-v1.0.0-Setup.exe',
       desc: t('download.winExeDesc'),
       color: 'bg-blue-50 dark:bg-blue-900/20'
     },
@@ -415,7 +423,7 @@ function DownloadSection() {
       icon: <FaWindows size={28} />,
       version: 'v1.0.0',
       ext: '.zip',
-      link: '#',
+      link: 'https://github.com/helloquocbao/mini-pet/releases/download/v1.0.0/MiniPet-v1.0.0-Portable.zip',
       desc: t('download.winZipDesc'),
       color: 'bg-indigo-50 dark:bg-indigo-900/20'
     }
@@ -633,19 +641,19 @@ function CustomPetPage() {
               <div className="space-y-10">
                 {/* Spritesheet Preview - Full Width & Scrollable */}
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between px-1">
-                    <div className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">{t('docs.spritesheet_sample')}</div>
-                    <div className="text-[11px] text-gray-400 italic">{t('docs.scroll_note')}</div>
-                  </div>
                   <div className="bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 md:p-8 border border-gray-200/60 dark:border-gray-700/50 group">
                     <div className="bg-white dark:bg-black/40 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-inner">
                       <div className="max-h-[500px] overflow-y-auto overflow-x-auto p-4 custom-scrollbar">
                         <img
-                          src="/wukong/spritesheet.png"
-                          alt="Wukong Spritesheet Example"
+                          src="/cat/spritesheet.png"
+                          alt="Lyra Spritesheet Example"
                           className="min-w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.01]"
                         />
                       </div>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between px-2">
+                      <span className="text-[14px] font-bold text-gray-400 uppercase tracking-widest">{t('docs.spritesheet_sample')}</span>
+                      <span className="text-[12px] text-gray-400">{t('docs.scroll_note')}</span>
                     </div>
                   </div>
                 </div>
@@ -666,9 +674,9 @@ function CustomPetPage() {
                       <div className="p-8 font-mono text-[14px] leading-relaxed overflow-x-auto">
                         <pre className="text-indigo-300">
                           {`{
-  "id": "wukong-base",
-  "displayName": "Black Wukong",
-  "description": "The great sage equal to heaven",
+  "id": "lyra-cat",
+  "displayName": "Lyra",
+  "description": "A cute white fluffy cat companion.",
   "spritesheetPath": "spritesheet.png"
 }`}
                         </pre>
@@ -719,6 +727,7 @@ function AppContent() {
         <div className="blob blob-3 opacity-40 dark:opacity-20" />
       </div>
 
+      <SEO />
       <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
       <Routes>

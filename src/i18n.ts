@@ -5,6 +5,10 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
+      seo: {
+        title: 'MiniPet - Your Cute Desktop Pixel Companion',
+        description: 'MiniPet is a lightweight desktop app that brings cute pixel friends to your workspace. Boost productivity with Pomodoro and enjoy interactive desktop pets.'
+      },
       nav: {
         features: 'Features',
         docs: 'Custom Pets',
@@ -90,6 +94,10 @@ const resources = {
   },
   vi: {
     translation: {
+      seo: {
+        title: 'MiniPet - Những người bạn Pixel đáng yêu trên máy tính',
+        description: 'MiniPet là ứng dụng máy tính nhẹ nhàng mang những người bạn pixel đến không gian làm việc của bạn. Tăng năng suất với Pomodoro và tận hưởng niềm vui với thú cưng máy tính.'
+      },
       nav: {
         features: 'Tính năng',
         docs: 'Custom Pets',
@@ -175,6 +183,10 @@ const resources = {
   },
   zh: {
     translation: {
+      seo: {
+        title: 'MiniPet - 您的可爱桌面像素伙伴',
+        description: 'MiniPet 是一款轻量级的桌面应用程序，可为您的工作空间带来可爱的像素朋友。通过番茄钟提高生产力，享受互动的桌面宠物。'
+      },
       nav: {
         features: '功能',
         docs: '自定义宠物',
@@ -260,6 +272,10 @@ const resources = {
   },
   it: {
     translation: {
+      seo: {
+        title: 'MiniPet - I Tuoi Simpatici Amici Pixel per Desktop',
+        description: 'MiniPet è un\'app desktop leggera che porta simpatici amici pixel nel tuo spazio di lavoro. Aumenta la produttività con Pomodoro e goditi i pet interattivi.'
+      },
       nav: {
         features: 'Caratteristiche',
         docs: 'Pet Personalizzati',
@@ -345,6 +361,10 @@ const resources = {
   },
   fr: {
     translation: {
+      seo: {
+        title: 'MiniPet - Vos Compagnons Pixel Adorables pour Bureau',
+        description: 'MiniPet est une application de bureau légère qui apporte de mignons amis pixel à votre espace de travail. Boostez votre productivité với Pomodoro.'
+      },
       nav: {
         features: 'Fonctionnalités',
         docs: 'Pets Personnalisés',

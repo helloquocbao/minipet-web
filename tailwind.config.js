@@ -5,18 +5,36 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '1.5rem',
+        lg: '2rem',
+        xl: '2rem',
+        '2xl': '2rem',
+      },
+    },
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1440px',
+    },
     extend: {
+      maxWidth: {
+        container: '1200px',
+      },
       colors: {
-        background: '#FAFAFA', // Light background
-        cream: '#1E293B', // Dark slate for text instead of cream
-        neon: '#10B981', // Emerald green for accents
-        dark: '#010828', // The dark color for inversion if needed
+        background: '#f5f7fb',
+        neon: '#10B981',
+        dark: '#111827',
       },
       fontFamily: {
-        grotesk: ['Anton', 'sans-serif'],
-        condiment: ['Condiment', 'cursive'],
+        sans: ['Montserrat', 'Inter', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
-      }
+      },
     },
   },
   plugins: [],

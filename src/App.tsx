@@ -1,6 +1,8 @@
 import React from 'react';
-import { Download, Monitor, Clock, Zap, Heart, ArrowLeft, Check } from 'lucide-react';
-import { FaTwitter, FaGithub } from 'react-icons/fa';
+import { Download, Clock, ArrowLeft, Check, Sun, Moon, Globe, ChevronDown, Menu, X } from 'lucide-react';
+import { FaGithub, FaApple, FaWindows } from 'react-icons/fa';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 /* ─── CONTAINER WRAPPER ─── */
 const Container = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
@@ -8,44 +10,177 @@ const Container = ({ children, className = '' }: { children: React.ReactNode; cl
 );
 
 /* ─── NAVBAR ─── */
-function Navbar({ setPage }: { setPage: (p: string) => void }) {
+function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => void }) {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [langOpen, setLangOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const langRef = React.useRef<HTMLDivElement>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setLangOpen(false);
+      }
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleNavClick = (l: string) => {
+    setMenuOpen(false);
+    if (l === 'Custom Pets') {
+      navigate('/custom-pet');
+    } else {
+      const id = l === 'Features' ? 'features' : l.toLowerCase();
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 100);
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    setLangOpen(false);
+  };
+
+  const languages = [
+    { code: 'en', label: 'English', short: 'EN' },
+    { code: 'vi', label: 'Tiếng Việt', short: 'VI' },
+    { code: 'zh', label: '中文', short: 'ZH' },
+    { code: 'it', label: 'Italiano', short: 'IT' },
+    { code: 'fr', label: 'Français', short: 'FR' }
+  ];
+
+  const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
+
   return (
-    <header className="fixed top-3 left-0 right-0 z-50 pointer-events-none">
+    <header className="fixed top-3 left-0 right-0 z-50 pointer-events-none" ref={menuRef}>
       <Container>
-        <div className="flex items-center w-full bg-white/85 backdrop-blur-xl border border-white/50 shadow-sm rounded-2xl px-5 py-2.5 pointer-events-auto">
+        <div className="flex items-center w-full bg-[var(--nav-bg)] backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-sm rounded-2xl px-3 sm:px-5 py-2 pointer-events-auto transition-colors duration-300">
           {/* Logo */}
           <button
-            onClick={() => setPage('home')}
+            onClick={() => navigate('/')}
             className="flex items-center gap-2 mr-auto cursor-pointer bg-transparent border-none p-0 group"
           >
-            <div className="w-7 h-7 rounded-lg bg-[#111827] flex items-center justify-center transition-transform group-hover:scale-105">
-              <span className="text-white text-[11px] leading-none">🐾</span>
+            <div className="w-7 h-7 rounded-lg bg-[#111827] dark:bg-white flex items-center justify-center transition-transform group-hover:scale-105 overflow-hidden border border-white/10 shadow-sm">
+              <img src="/icons/icon.png" alt="MiniPet Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="text-[14px] font-extrabold text-[#111827] tracking-tight">MiniPet</span>
+            <span className="text-[13px] sm:text-[13.5px] font-extrabold text-[#111827] dark:text-white tracking-tight">MiniPet</span>
           </button>
 
-          {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-7 mr-6">
-            {['Features', 'Gallery', 'Productivity', 'Does'].map((l) => (
+          {/* Desktop Nav links */}
+          <nav className="hidden lg:flex items-center gap-7 mx-6">
+            {[t('nav.features'), t('nav.docs')].map((l) => (
               <button
                 key={l}
-                onClick={() => {
-                  setPage('home');
-                  setTimeout(
-                    () => document.getElementById(l.toLowerCase())?.scrollIntoView({ behavior: 'smooth' }),
-                    80
-                  );
-                }}
-                className="text-[13px] font-semibold text-gray-500 hover:text-[#111827] transition-colors bg-transparent border-none cursor-pointer p-0"
+                onClick={() => handleNavClick(l === t('nav.docs') ? 'Custom Pets' : 'Features')}
+                className="text-[13px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer p-0"
               >
                 {l}
               </button>
             ))}
           </nav>
 
-          {/* CTA */}
-          <button className="btn-dark !rounded-xl !py-1.5 !px-4 !text-[13px]">Download Free</button>
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            {/* Language Switcher Dropdown */}
+            <div className="relative" ref={langRef}>
+              <button
+                onClick={() => setLangOpen(!langOpen)}
+                className="flex items-center gap-1.5 bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 px-2 sm:px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-gray-700/50 transition-all cursor-pointer group"
+              >
+                <Globe size={13} className="text-gray-400 group-hover:text-indigo-500 transition-colors" />
+                <span className="text-[10px] sm:text-[11px] font-black text-gray-600 dark:text-gray-300">{currentLang.short}</span>
+                <ChevronDown size={10} className={`text-gray-400 transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {langOpen && (
+                <div className="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {languages.map((lng) => (
+                    <button
+                      key={lng.code}
+                      onClick={() => changeLanguage(lng.code)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-colors ${i18n.language === lng.code
+                          ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white'
+                        }`}
+                    >
+                      <span>{lng.label}</span>
+                      {i18n.language === lng.code && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-none cursor-pointer"
+            >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="lg:hidden w-8 h-8 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-none cursor-pointer"
+            >
+              {menuOpen ? <X size={16} /> : <Menu size={16} />}
+            </button>
+
+            <button
+              onClick={() => {
+                if (location.pathname !== '/') {
+                  navigate('/');
+                  setTimeout(() => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                } else {
+                  document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="btn-dark !rounded-xl !py-1.5 !px-3 sm:!px-4 !text-[11px] sm:!text-[13px] pointer-events-auto flex items-center gap-1.5"
+            >
+              <Download size={14} className="sm:hidden" />
+              <span className="hidden xs:inline">{t('nav.download')}</span>
+              <span className="xs:hidden">Get</span>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {menuOpen && (
+          <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl shadow-2xl p-4 animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-auto mx-4">
+            <div className="flex flex-col gap-2">
+              {[t('nav.features'), t('nav.docs')].map((l) => (
+                <button
+                  key={l}
+                  onClick={() => handleNavClick(l === t('nav.docs') ? 'Custom Pets' : 'Features')}
+                  className="w-full text-left px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all border-none bg-transparent cursor-pointer"
+                >
+                  {l}
+                </button>
+              ))}
+              <div className="h-px bg-gray-100 dark:bg-gray-800 my-2 mx-5" />
+              <a
+                href="https://github.com/helloquocbao/mini-pet"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
+              >
+                <FaGithub size={18} />
+                GitHub Repository
+              </a>
+            </div>
+          </div>
+        )}
       </Container>
     </header>
   );
@@ -53,32 +188,36 @@ function Navbar({ setPage }: { setPage: (p: string) => void }) {
 
 /* ─── HERO ─── */
 function Hero() {
+  const { t } = useTranslation();
   return (
-    <section className="pt-24 sm:pt-28 md:pt-36 pb-10 md:pb-16 overflow-hidden">
+    <section className="pt-20 pb-10 md:pt-32 md:pb-20 overflow-hidden relative">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center">
           {/* Left copy */}
           <div className="z-10 order-2 md:order-1 text-center md:text-left">
-            <h1 className="text-[#111827] font-[900] leading-[1.08] tracking-tight mb-4 text-[36px] sm:text-[46px] lg:text-[54px]">
-              Meet your new<br />
-              productivity<br />
-              sidekick.
+            <h1 className="text-[#111827] dark:text-white font-[900] leading-[1.08] tracking-tight mb-4 text-[36px] sm:text-[46px] lg:text-[54px]">
+              {t('hero.title1')}<br />
+              {t('hero.title2')}<br />
+              {t('hero.title3')}
             </h1>
-            <p className="text-gray-500 text-[13.5px] sm:text-[14px] leading-relaxed mb-6 max-w-sm mx-auto md:mx-0">
-              MiniPet is a lightweight desktop app that brings a cute pixel companion to your workspace. They walk, talk, and react while you work.
+            <p className="text-gray-500 dark:text-gray-400 text-[14px] sm:text-[15px] leading-relaxed mb-6 max-w-sm mx-auto md:mx-0">
+              {t('hero.desc')}
             </p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-5">
-              <a href="#download" className="btn-dark !rounded-2xl !py-2.5 !px-6 !text-[13px]">
-                <Download size={16} /> Get MiniPet Free
-              </a>
+              <button
+                onClick={() => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-dark !rounded-2xl !py-2.5 !px-6 !text-[13.5px]"
+              >
+                <Download size={16} /> {t('hero.getFree')}
+              </button>
               <a
                 href="https://github.com/helloquocbao/mini-pet"
                 target="_blank"
                 rel="noreferrer"
-                className="btn-ghost !rounded-2xl !py-2.5 !px-6 !text-[13px]"
+                className="btn-ghost !rounded-2xl !py-2.5 !px-6 !text-[13.5px]"
               >
-                <FaGithub size={16} /> Source Code
+                <FaGithub size={16} /> {t('hero.source')}
               </a>
             </div>
 
@@ -112,7 +251,7 @@ function Hero() {
               <img
                 src="/hero-pet-new.png"
                 alt="MiniPet Astronaut companion"
-                className="w-[80%] h-[80%] object-contain hero-float"
+                className=" object-contain hero-float"
                 style={{ mixBlendMode: 'multiply' }}
               />
             </div>
@@ -123,195 +262,202 @@ function Hero() {
   );
 }
 
-/* ─── FEATURES — BENTO GRID ─── */
+/* ─── FEATURES ─── */
 function Features() {
+  const { t } = useTranslation();
   return (
-    <section id="features" className="pb-10 md:pb-20">
+    <section id="features" className="py-20 bg-gray-50/50 dark:bg-black/5 relative">
       <Container>
         {/* Section header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-[900] text-[#111827] tracking-tight leading-tight mb-3">
-            Everything you need
+          <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-[900] text-[#111827] dark:text-white tracking-tight leading-tight mb-3">
+            {t('features.badge')}
           </h2>
-          <p className="text-gray-500 text-[14px] sm:text-[15px] max-w-md mx-auto leading-relaxed">
-            A full-featured desktop companion packed with tools to keep you productive and entertained.
+          <p className="text-gray-500 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto leading-relaxed">
+            {t('features.desc')}
           </p>
         </div>
 
-        {/* ── Bento Grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-
-          {/* ── Top Row: Compact Indented Cards ── */}
-          <div className="md:col-span-12 md:px-20 lg:px-40 mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* ── Large: Live Desktop Companion ── */}
-              <div className="card overflow-hidden flex flex-col">
-                <div
-                  className="flex-1 bg-gradient-to-br from-[#dde8ff] to-[#cdd8f8] flex items-center justify-center overflow-hidden"
-                  style={{ minHeight: 180 }}
-                >
-                  <img
-                    src="/feature-companion.png"
-                    alt="Live desktop companion preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4 md:p-5">
-                  <h3 className="text-[16px] font-extrabold text-[#111827] mb-1">Live Desktop Companion</h3>
-                  <p className="text-[12.5px] text-gray-500 leading-relaxed max-w-sm">
-                    Your pixel pet lives right on your screen — walking, talking, and bringing joy to every work session.
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          {/* Top 2 Cards: Main Features */}
+          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+            {/* ── Desktop Companion ── */}
+            <div className="card overflow-hidden flex flex-col">
+              <div
+                className="flex-1 bg-gradient-to-br from-[#dde8ff] to-[#cdd8f8] flex items-center justify-center overflow-hidden"
+                style={{ minHeight: 160 }}
+              >
+                <img
+                  src="/feature-companion.png"
+                  alt="Cute astronaut pet"
+                  className="w-full h-full object-cover"
+                />
               </div>
+              <div className="p-4 md:p-6">
+                <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.companion.title')}</h3>
+                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm">
+                  {t('features.companion.desc')}
+                </p>
+              </div>
+            </div>
 
-              {/* ── Pomodoro Timer ── */}
-              <div className="card overflow-hidden flex flex-col">
-                {/* Image fills remaining space */}
-                <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-rose-50 to-orange-50" style={{ minHeight: 180 }}>
-                  <img
-                    src="/card-pomodoro.png"
-                    alt="Cute cat with Pomodoro timer"
-                    className="w-full h-full object-contain object-bottom"
-                    style={{ mixBlendMode: 'multiply' }}
-                  />
-                  {/* Timer pill */}
-                  <div className="absolute top-3 left-3 bg-rose-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">
-                    <Clock size={10} /> 25:00
-                  </div>
-                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-[10px] font-semibold text-gray-600 px-2 py-0.5 rounded-full shadow-sm">Focus mode</div>
+            {/* ── Pomodoro Timer ── */}
+            <div className="card overflow-hidden flex flex-col">
+              {/* Image fills remaining space */}
+              <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-rose-50 to-orange-50" style={{ minHeight: 160 }}>
+                <img
+                  src="/card-pomodoro.png"
+                  alt="Cute cat with Pomodoro timer"
+                  className="w-full h-full object-cover opacity-90"
+                  style={{ mixBlendMode: 'multiply' }}
+                />
+                {/* Timer pill */}
+                <div className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">
+                  <Clock size={9} /> 25:00
                 </div>
-                {/* Text always at bottom */}
-                <div className="p-4 md:p-5 border-t border-gray-100/80">
-                  <h3 className="text-[16px] font-extrabold text-[#111827] mb-1">Pomodoro Timer</h3>
-                  <p className="text-[12.5px] text-gray-500 leading-relaxed max-w-sm">
-                    Customisable work/break cycles with your pet — gently nudging you when it's time to rest.
-                  </p>
-                </div>
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-[9px] font-semibold text-gray-600 px-2 py-0.5 rounded-full shadow-sm">Focus mode</div>
+              </div>
+              {/* Text always at bottom */}
+              <div className="p-4 md:p-6 border-t border-gray-100/80">
+                <h3 className="text-[15px] font-extrabold text-[#111827] mb-1.5">{t('features.pomodoro.title')}</h3>
+                <p className="text-[13px] text-gray-500 leading-relaxed max-w-sm">
+                  {t('features.pomodoro.desc')}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* ── Bottom row: 3 equal cards ── */}
-
-          {/* Desktop Overlay */}
-          <div className="md:col-span-4 card overflow-hidden flex flex-col">
-            <div className="relative overflow-hidden" style={{ height: 170 }}>
-              <img
-                src="/card-overlay.png"
-                alt="Pet walking across desktop"
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              <div className="absolute bottom-3 left-3">
-                <span className="bg-white/95 text-[11px] font-bold text-gray-700 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-                  <Monitor size={10} /> Always on top
-                </span>
+          {/* Side Card: Multi-Pet Support */}
+          <div className="md:col-span-1 card overflow-hidden flex flex-col group">
+            <div className="flex-1 relative bg-[#f1f4ff] dark:bg-indigo-900/10 overflow-hidden min-h-[220px]">
+              <div className="absolute inset-0 flex items-center justify-center p-8 transition-transform duration-700 group-hover:scale-110">
+                <img
+                  src="/card-context.png"
+                  alt="Many pets on screen"
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
-            <div className="p-5">
-              <h3 className="text-[15px] font-extrabold text-[#111827] mb-1">Desktop Overlay</h3>
-              <p className="text-[13px] text-gray-500 leading-relaxed">
-                Your pet lives on top of every window. Drag them anywhere, or watch them wander your screen.
+            <div className="p-6">
+              <h3 className="text-[16px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.multi.title')}</h3>
+              <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                {t('features.multi.desc')}
               </p>
             </div>
           </div>
 
-          {/* Context Awareness */}
-          <div className="md:col-span-4 card overflow-hidden flex flex-col">
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50" style={{ height: 170 }}>
-              <img
-                src="/card-context.png"
-                alt="Cats reacting to different contexts"
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
-              <div className="absolute top-3 right-3 flex flex-col gap-1.5">
-                <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Coding 💻</span>
-                <span className="bg-purple-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Watching 🎬</span>
-                <span className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Reading 📖</span>
+          {/* Bottom 2 Cards: Interaction & PetDex */}
+          <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+            {/* ── File Eating System ── */}
+            <div className="card overflow-hidden flex items-center bg-amber-50/30 dark:bg-amber-900/5 group">
+              <div className="w-1/3 h-full relative overflow-hidden flex items-center justify-center">
+                <img
+                  src="/card-overlay.png"
+                  alt="Pet eating file"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110"
+                />
+              </div>
+              <div className="p-6 w-2/3">
+                <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.eating.title')}</h3>
+                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                  {t('features.eating.desc')}
+                </p>
               </div>
             </div>
-            <div className="p-5">
-              <h3 className="text-[15px] font-extrabold text-[#111827] mb-1">Context Awareness</h3>
-              <p className="text-[13px] text-gray-500 leading-relaxed">
-                Your pet detects what you're doing and reacts — hyped during coding sprints, chill when you're relaxing.
-              </p>
-            </div>
-          </div>
 
-          {/* PetDex & Custom Pets */}
-          <div className="md:col-span-4 card overflow-hidden flex flex-col">
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-blue-50" style={{ height: 170 }}>
-              <img
-                src="/card-petdex.png"
-                alt="Import from PetDex and custom pets"
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
-              <div className="absolute top-3 left-3">
-                <span className="bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-                  <Download size={10} /> PetDex Ready
-                </span>
+            {/* ── PetDex & Custom Pets ── */}
+            <div className="card overflow-hidden flex items-center bg-indigo-50/30 dark:bg-indigo-900/5 group">
+              <div className="w-1/3 h-full relative overflow-hidden flex items-center justify-center">
+                <img
+                  src="/card-petdex.png"
+                  alt="Pet gallery"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-110"
+                />
+              </div>
+              <div className="p-6 w-2/3">
+                <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.custom.title')}</h3>
+                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                  {t('features.custom.desc')}
+                </p>
               </div>
             </div>
-            <div className="p-5">
-              <h3 className="text-[15px] font-extrabold text-[#111827] mb-1">PetDex & Custom Pets</h3>
-              <p className="text-[13px] text-gray-500 leading-relaxed">
-                Import from our massive PetDex library or upload your own pixel art to create a truly unique companion.
-              </p>
-            </div>
           </div>
-
         </div>
-
       </Container>
     </section>
   );
 }
 
-/* ─── PRODUCTIVITY ─── */
-function ProductivitySection() {
-  const items = [
-    { icon: <Clock size={16} />, label: 'Pomodoro Timer', desc: 'Customisable work/break intervals', bg: '#ecf9ff' },
-    { icon: <Zap size={16} />, label: 'Smart Reminders', desc: 'Stretch with hydration lines', bg: '#fffbeb' },
-    { icon: <Monitor size={16} />, label: 'Focus Stats', desc: 'Track your productivity daily', bg: '#fdf2f8' },
+/* ─── DOWNLOAD SECTION ─── */
+function DownloadSection() {
+  const { t } = useTranslation();
+  const downloads = [
+    {
+      platform: 'macOS',
+      icon: <FaApple size={28} />,
+      version: 'v1.0.0',
+      ext: '.dmg',
+      link: '#',
+      desc: t('download.macDesc'),
+      color: 'bg-gray-100 dark:bg-gray-800'
+    },
+    {
+      platform: 'Windows',
+      icon: <FaWindows size={28} />,
+      version: 'v1.0.0',
+      ext: '.exe',
+      link: '#',
+      desc: t('download.winExeDesc'),
+      color: 'bg-blue-50 dark:bg-blue-900/20'
+    },
+    {
+      platform: 'Windows',
+      icon: <FaWindows size={28} />,
+      version: 'v1.0.0',
+      ext: '.zip',
+      link: '#',
+      desc: t('download.winZipDesc'),
+      color: 'bg-indigo-50 dark:bg-indigo-900/20'
+    }
   ];
 
   return (
-    <section id="productivity" className="py-10 md:py-20">
+    <section id="download" className="py-16 md:py-24 bg-white/30 dark:bg-black/10">
       <Container>
-        <div className="card overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch !bg-white/50">
-          {/* Pet side */}
-          <div className="relative flex items-end justify-center bg-gradient-to-br from-indigo-50 to-blue-100/60 border-b md:border-b-0 md:border-r border-blue-200/50 min-h-[280px] sm:min-h-[300px] md:min-h-[380px] overflow-hidden">
-            <img
-              src="/hero-pet-new.png"
-              alt="MiniPet focus companion astronaut"
-              className="w-auto max-h-[340px] md:max-h-[380px] object-contain object-bottom mb-4"
-            />
-          </div>
+        <div className="text-center mb-12">
+          <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-[900] text-[#111827] dark:text-white tracking-tight mb-3">
+            {t('download.title')}
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto">
+            {t('download.desc')}
+          </p>
+        </div>
 
-          {/* Text side */}
-          <div className="p-8 md:p-12 flex flex-col justify-center text-center md:text-left">
-            <h2 className="text-[24px] sm:text-[28px] md:text-[32px] font-[900] text-[#111827] mb-7 leading-tight">
-              Focus better with <span className="text-indigo-500">MiniPet</span>
-            </h2>
-            <div className="flex flex-col gap-5 items-center md:items-start">
-              {items.map((item) => (
-                <div key={item.label} className="flex items-center gap-4 group">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 flex-shrink-0"
-                    style={{ background: item.bg }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div className="text-[14px] font-bold text-[#111827]">{item.label}</div>
-                    <div className="text-[13px] text-gray-400 font-medium">{item.desc}</div>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {downloads.map((d, idx) => (
+            <div key={idx} className="card p-8 flex flex-col items-center text-center group">
+              <div className={`w-16 h-16 rounded-2xl ${d.color} flex items-center justify-center mb-6 transition-transform group-hover:scale-110 duration-300`}>
+                <div className="text-[#111827] dark:text-white">
+                  {d.icon}
                 </div>
-              ))}
+              </div>
+              <h3 className="text-[22px] font-black text-[#111827] dark:text-white mb-1">{d.platform}</h3>
+              <p className="text-[14px] text-gray-500 dark:text-gray-400 mb-6">{d.desc}</p>
+
+              <div className="w-full pt-6 border-t border-gray-100 dark:border-gray-800">
+                <a
+                  href={d.link}
+                  className="btn-dark w-full !justify-center !py-3 !rounded-2xl flex items-center gap-2 group/btn"
+                >
+                  <Download size={18} className="group-hover/btn:translate-y-0.5 transition-transform" />
+                  {t('download.btn')} {d.ext}
+                </a>
+                <div className="mt-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                  Version {d.version}
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </Container>
     </section>
@@ -320,16 +466,17 @@ function ProductivitySection() {
 
 /* ─── FOOTER ─── */
 function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="pt-12 pb-10">
       <Container>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-gray-200/60 pt-8">
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#111827] flex items-center justify-center">
-              <span className="text-white text-[11px]">🐾</span>
+            <div className="w-8 h-8 rounded-lg bg-[#111827] dark:bg-white flex items-center justify-center overflow-hidden">
+              <img src="/icons/icon.png" alt="MiniPet Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="text-[15px] font-black text-[#111827] tracking-tight">MiniPet</span>
+            <span className="text-[15px] font-black text-[#111827] dark:text-white tracking-tight">MiniPet</span>
           </div>
 
           {/* Social icons */}
@@ -338,30 +485,22 @@ function Footer() {
               href="https://github.com/helloquocbao/mini-pet"
               target="_blank"
               rel="noreferrer"
-              className="text-gray-400 hover:text-[#111827] transition-all hover:scale-110"
+              className="text-gray-400 hover:text-[#111827] dark:hover:text-white transition-all hover:scale-110"
             >
               <FaGithub size={20} />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"
-            >
-              <FaTwitter size={20} />
             </a>
           </div>
 
           {/* Disclaimer */}
           <div className="max-w-2xl text-center sm:text-left">
-            <p className="text-[11px] text-gray-400 leading-relaxed font-medium">
-              <span className="font-bold text-gray-500">Disclaimer:</span> This application only provides tools; we do not own and are not responsible for content/images uploaded by users or linked from external sources.
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
+              <span className="font-bold text-gray-600 dark:text-gray-300">{t('footer.disclaimer')}</span> {t('footer.disclaimer_text')}
             </p>
           </div>
 
           {/* Copyright */}
-          <p className="text-[12px] text-gray-300 font-semibold flex-shrink-0">
-            © 2036 MiniPet — Purely Colore, Furity, Inc.
+          <p className="text-[12px] text-gray-300 dark:text-gray-500 font-semibold flex-shrink-0">
+            © 2026 MiniPet — {t('footer.copyright')}
           </p>
         </div>
       </Container>
@@ -369,43 +508,242 @@ function Footer() {
   );
 }
 
+/* ─── CUSTOM PET PAGE ─── */
+function CustomPetPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  return (
+    <div className="pt-32 pb-20 min-h-screen">
+      <Container className="max-w-4xl">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-8 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium group"
+        >
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          {t('docs.back')}
+        </button>
+
+        <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-gray-800 transition-colors duration-300">
+          <div className="mb-10">
+            <h1 className="text-3xl md:text-5xl font-[900] text-[#111827] dark:text-white mb-4 tracking-tight">{t('docs.title')}</h1>
+            <div className="h-1.5 w-20 bg-indigo-500 rounded-full mb-6" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
+              {t('docs.desc')}
+            </p>
+          </div>
+
+          <div className="space-y-16">
+            {/* 1. Cấu trúc thư mục */}
+            <section>
+              <h2 className="text-2xl font-bold text-[#111827] dark:text-white mb-5 flex items-center gap-3">
+                <span className="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/20">1</span>
+                {t('docs.section1')}
+              </h2>
+              <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">{t('docs.section1_desc')}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                    <div className="text-pink-600 dark:text-pink-400 font-mono font-bold mb-1">pet.json</div>
+                    <div className="text-xs text-gray-400 uppercase font-bold tracking-wider">Configuration</div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                    <div className="text-indigo-600 dark:text-indigo-400 font-mono font-bold mb-1">spritesheet.webp</div>
+                    <div className="text-xs text-gray-400 uppercase font-bold tracking-wider">Animations</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. Quy định Spritesheet */}
+            <section>
+              <h2 className="text-2xl font-bold text-[#111827] dark:text-white mb-5 flex items-center gap-3">
+                <span className="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/20">2</span>
+                {t('docs.section2')}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">{t('docs.section2_desc')}</p>
+
+              <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700/50">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100/80 dark:bg-gray-800/80 text-[#111827] dark:text-white text-xs uppercase tracking-widest">
+                      <th className="p-5 font-bold w-20 text-center">{t('docs.table.row')}</th>
+                      <th className="p-5 font-bold">{t('docs.table.action')}</th>
+                      <th className="p-5 font-bold hidden sm:table-cell">{t('docs.table.desc')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-600 dark:text-gray-300 text-[14px]">
+                    {[
+                      { row: 0, action: t('docs.table.idle'), label: 'Idle' },
+                      { row: 1, action: t('docs.table.walkR'), label: 'Walk Phải' },
+                      { row: 2, action: t('docs.table.walkL'), label: 'Walk Trái' },
+                      { row: 3, action: t('docs.table.greet'), label: 'Chào' },
+                      { row: 4, action: t('docs.table.action_spec'), label: 'Action' },
+                      { row: 5, action: t('docs.table.failed'), label: 'Failed' },
+                      { row: 6, action: t('docs.table.waiting'), label: 'Waiting' },
+                      { row: 7, action: t('docs.table.running'), label: 'Running' },
+                      { row: 8, action: t('docs.table.review'), label: 'Review' },
+                    ].map((row, idx) => (
+                      <tr key={idx} className="border-b border-gray-200/40 dark:border-gray-700/40 hover:bg-white dark:hover:bg-gray-800/50 transition-colors">
+                        <td className="p-5 font-mono text-center font-bold text-indigo-600 dark:text-indigo-400 bg-gray-100/30 dark:bg-gray-800/20">{row.row}</td>
+                        <td className="p-5 font-bold text-[#111827] dark:text-white">{row.label}</td>
+                        <td className="p-5 hidden sm:table-cell text-gray-500 dark:text-gray-400">{row.action}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* 3. Cấu hình pet.json */}
+            <section>
+              <h2 className="text-2xl font-bold text-[#111827] dark:text-white mb-5 flex items-center gap-3">
+                <span className="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/20">3</span>
+                {t('docs.section3')}
+              </h2>
+              <div className="bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl p-7 border border-indigo-100 dark:border-indigo-900/30">
+                <p className="text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">
+                  {t('docs.section3_desc')}
+                </p>
+                <div className="bg-white dark:bg-gray-900/50 rounded-xl p-5 border border-indigo-200/50 dark:border-indigo-500/20 shadow-sm">
+                  <p className="text-indigo-900 dark:text-indigo-300 text-sm leading-relaxed flex gap-3">
+                    <Check size={18} className="flex-shrink-0 text-indigo-500" />
+                    <span>
+                      {t('docs.section3_note')}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* 4. Ví dụ thực tế: Black Wukong */}
+            <section className="pt-12 border-t border-gray-100 dark:border-gray-800">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                  <h2 className="text-3xl font-[900] text-[#111827] dark:text-white flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-base font-bold shadow-lg shadow-orange-500/20">4</span>
+                    {t('docs.section4')}
+                  </h2>
+                  <p className="text-gray-500 dark:text-gray-400 mt-2">{t('docs.section4_desc')}</p>
+                </div>
+                <span className="w-fit px-4 py-1.5 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-[12px] font-black uppercase tracking-widest rounded-xl border border-orange-200/50 dark:border-orange-500/20">
+                  Reference Asset
+                </span>
+              </div>
+
+              <div className="space-y-10">
+                {/* Spritesheet Preview - Full Width & Scrollable */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between px-1">
+                    <div className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">{t('docs.spritesheet_sample')}</div>
+                    <div className="text-[11px] text-gray-400 italic">{t('docs.scroll_note')}</div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 md:p-8 border border-gray-200/60 dark:border-gray-700/50 group">
+                    <div className="bg-white dark:bg-black/40 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-inner">
+                      <div className="max-h-[500px] overflow-y-auto overflow-x-auto p-4 custom-scrollbar">
+                        <img
+                          src="/wukong/spritesheet.png"
+                          alt="Wukong Spritesheet Example"
+                          className="min-w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.01]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* JSON Code Preview - Professional Code Block */}
+                <div className="space-y-4">
+                  <div className="text-[13px] font-bold text-gray-400 uppercase tracking-widest px-1">{t('docs.json_config')}</div>
+                  <div className="bg-[#0d0d0d] rounded-3xl p-1 shadow-2xl border border-gray-800/50">
+                    <div className="bg-[#1a1a1a] rounded-[22px] overflow-hidden">
+                      <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/5">
+                        <div className="flex gap-2">
+                          <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-lg shadow-[#ff5f56]/20" />
+                          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-lg shadow-[#ffbd2e]/20" />
+                          <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-lg shadow-[#27c93f]/20" />
+                        </div>
+                        <div className="text-[11px] font-bold text-gray-500 uppercase tracking-tighter">pet.json</div>
+                      </div>
+                      <div className="p-8 font-mono text-[14px] leading-relaxed overflow-x-auto">
+                        <pre className="text-indigo-300">
+                          {`{
+  "id": "wukong-base",
+  "displayName": "Black Wukong",
+  "description": "The great sage equal to heaven",
+  "spritesheetPath": "spritesheet.png"
+}`}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+}
+
 /* ─── APP ─── */
-export default function App() {
-  const [page, setPage] = React.useState('home');
+function AppContent() {
+  const [isDark, setIsDark] = React.useState(() => {
+    return localStorage.getItem('theme') === 'dark' ||
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  });
+
+  const location = useLocation();
+
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [page]);
+  }, [location.pathname]);
+
+  React.useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen relative overflow-x-hidden transition-colors duration-300">
       {/* Animated background blobs */}
       <div className="blob-container">
-        <div className="blob blob-1" />
-        <div className="blob blob-2" />
-        <div className="blob blob-3" />
+        <div className="blob blob-1 opacity-40 dark:opacity-20" />
+        <div className="blob blob-2 opacity-40 dark:opacity-20" />
+        <div className="blob blob-3 opacity-40 dark:opacity-20" />
       </div>
 
-      <Navbar setPage={setPage} />
+      <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
-      {page === 'home' ? (
-        <main>
-          <Hero />
-          <Features />
-          <ProductivitySection />
-        </main>
-      ) : (
-        <div className="pt-32 pb-20">
-          <Container>
-            <button onClick={() => setPage('home')} className="flex items-center gap-2 text-gray-500 mb-8">
-              <ArrowLeft size={16} /> Back
-            </button>
-            <h1 className="text-4xl font-black mb-4">Documentation</h1>
-            <p>Work in progress...</p>
-          </Container>
-        </div>
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main>
+              <Hero />
+              <Features />
+              <DownloadSection />
+            </main>
+          }
+        />
+        <Route path="/custom-pet" element={<CustomPetPage />} />
+      </Routes>
 
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }

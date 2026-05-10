@@ -52,7 +52,15 @@ const resources = {
         macDesc: 'Supports Intel & Apple Silicon',
         winExeDesc: 'Standard installer for Windows',
         winZipDesc: 'Portable version (No install)',
-        btn: 'Download'
+        btn: 'Download',
+        troubleshooting: {
+          macTitle: 'Getting "App is damaged" or "Unidentified Developer" on Mac?',
+          macStep1: 'Don\'t worry! It\'s because the app is unsigned. To open it:',
+          macStep2: 'Open your "Applications" folder in Finder (not Launchpad).',
+          macStep3: 'Right-click MiniPet and select "Open" from the menu, then click "Open" again in the dialog.',
+          macTerminalTitle: 'Still can\'t open?',
+          macTerminalStep: 'Ensure MiniPet is in Applications folder, then run: xattr -cr /Applications/MiniPet.app'
+        }
       },
       docs: {
         back: 'Back to Home',
@@ -141,7 +149,15 @@ const resources = {
         macDesc: 'Hỗ trợ Intel & Apple Silicon',
         winExeDesc: 'Bản cài đặt tiêu chuẩn cho Windows',
         winZipDesc: 'Bản Portable (Không cần cài đặt)',
-        btn: 'Tải về'
+        btn: 'Tải về',
+        troubleshooting: {
+          macTitle: 'Gặp lỗi "App is damaged" hoặc "Unidentified Developer" trên Mac?',
+          macStep1: 'Đừng lo! Đó là vì ứng dụng chưa được ký xác thực. Để mở:',
+          macStep2: 'Mở thư mục "Applications" (Ứng dụng) bằng Finder (không dùng Launchpad).',
+          macStep3: 'Nhấn chuột phải vào MiniPet chọn "Mở" (Open), sau đó nhấn "Mở" thêm lần nữa ở hộp thoại xác nhận.',
+          macTerminalTitle: 'Vẫn không mở được?',
+          macTerminalStep: 'Đảm bảo đã kéo MiniPet vào Applications, sau đó chạy: xattr -cr /Applications/MiniPet.app'
+        }
       },
       docs: {
         back: 'Quay lại trang chủ',

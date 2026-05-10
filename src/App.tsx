@@ -467,6 +467,58 @@ function DownloadSection() {
             </div>
           ))}
         </div>
+
+        {/* macOS Troubleshooting */}
+        <div className="mt-16 max-w-3xl mx-auto bg-indigo-50/50 dark:bg-indigo-900/10 rounded-3xl p-6 md:p-8 border border-indigo-100/50 dark:border-indigo-500/20 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/20">
+              <FaApple size={20} />
+            </div>
+            <div>
+              <h3 className="text-[17px] font-black text-[#111827] dark:text-white mb-2">
+                {t('download.troubleshooting.macTitle')}
+              </h3>
+              <p className="text-[13.5px] text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
+                {t('download.troubleshooting.macStep1')}
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 text-[13px] font-bold text-gray-600 dark:text-gray-300">
+                  <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-[10px] mt-0.5 flex-shrink-0">1</div>
+                  <span>{t('download.troubleshooting.macStep2')}</span>
+                </div>
+                <div className="flex items-start gap-3 text-[13px] font-bold text-gray-600 dark:text-gray-300">
+                  <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-[10px] mt-0.5 flex-shrink-0">2</div>
+                  <span>{t('download.troubleshooting.macStep3')}</span>
+                </div>
+              </div>
+
+              {/* Terminal Backup Option */}
+              <div className="mt-6 pt-6 border-t border-indigo-100 dark:border-indigo-900/30">
+                <p className="text-[12px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                  {t('download.troubleshooting.macTerminalTitle')}
+                </p>
+                <div className="bg-[#1a1b26] rounded-2xl p-5 border border-white/5 shadow-2xl shadow-indigo-500/10 group relative">
+                  {/* Terminal Header Dots */}
+                  <div className="flex items-center gap-1.5 mb-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                  </div>
+                  <div className="font-mono text-[12.5px] leading-relaxed">
+                    <div className="text-gray-500 mb-2"># {t('download.troubleshooting.macTerminalStep').split(':')[0]}:</div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold shrink-0">$</span>
+                      <code className="text-indigo-200 break-all">
+                        {t('download.troubleshooting.macTerminalStep').split(':')[1]?.trim() || t('download.troubleshooting.macTerminalStep')}
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </Container>
     </section>
   );

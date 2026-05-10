@@ -1,14 +1,15 @@
 import React from 'react';
 import { Download, Clock, ArrowLeft, Check, Sun, Moon, Globe, ChevronDown, Menu, X } from 'lucide-react';
 import { FaGithub, FaApple, FaWindows } from 'react-icons/fa';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 
 /* ─── SEO COMPONENT ─── */
-const SEO = () => {
+const SEO = ({ isDark }: { isDark: boolean }) => {
   const { t, i18n } = useTranslation();
-  const baseUrl = "https://www.minipet.xyz";
+  const location = useLocation();
+  const baseUrl = "https://minipet.vercel.app";
   
   const schemaOrgJSONLD = {
     "@context": "http://schema.org",
@@ -35,7 +36,8 @@ const SEO = () => {
       <title>{t('seo.title')}</title>
       <meta name="description" content={t('seo.description')} />
       <meta name="keywords" content={t('seo.keywords')} />
-      <link rel="canonical" href={baseUrl} />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <link rel="canonical" href={`${baseUrl}${location.pathname}`} />
       
       {/* Performance: Preconnect to Font Servers */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,7 +53,7 @@ const SEO = () => {
       <link rel="alternate" hrefLang="x-default" href={baseUrl} />
       
       {/* Mobile Experience */}
-      <meta name="theme-color" content={i18n.language === 'dark' ? '#0f172a' : '#e8eeff'} />
+      <meta name="theme-color" content={isDark ? '#0f172a' : '#e8eeff'} />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -166,11 +168,11 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
       <Container>
         <div className="flex items-center w-full bg-[var(--nav-bg)] backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-sm rounded-2xl px-3 sm:px-5 py-2 pointer-events-auto transition-colors duration-300">
           {/* Logo */}
-          <button
-            onClick={() => navigate('/')}
+          <Link
+            to="/"
             aria-label="Back to home"
             title="MiniPet Home"
-            className="flex items-center gap-2 mr-auto cursor-pointer bg-transparent border-none p-0 group"
+            className="flex items-center gap-2 mr-auto cursor-pointer bg-transparent border-none p-0 group no-underline"
           >
             <div className="w-7 h-7 rounded-lg bg-[#111827] dark:bg-white flex items-center justify-center transition-transform group-hover:scale-105 overflow-hidden border border-white/10 shadow-sm">
               <img 
@@ -181,23 +183,27 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
                 width="28"
                 height="28"
                 /* @ts-ignore */
-                fetchpriority="high"
+                fetchPriority="high"
               />
             </div>
             <span className="text-[13px] sm:text-[13.5px] font-extrabold text-[#111827] dark:text-white tracking-tight">MiniPet</span>
-          </button>
+          </Link>
 
           {/* Desktop Nav links */}
           <nav className="hidden lg:flex items-center gap-7 mx-6">
-            {[t('nav.features'), t('nav.docs')].map((l) => (
-              <button
-                key={l}
-                onClick={() => handleNavClick(l === t('nav.docs') ? 'Custom Pets' : 'Features')}
-                className="text-[13px] font-bold text-gray-600 dark:text-gray-300 hover:text-[#111827] dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer p-0"
-              >
-                {l}
-              </button>
-            ))}
+            <a
+              href="#features"
+              onClick={(e) => { e.preventDefault(); handleNavClick('Features'); }}
+              className="text-[13px] font-bold text-gray-600 dark:text-gray-300 hover:text-[#111827] dark:hover:text-white transition-colors no-underline"
+            >
+              {t('nav.features')}
+            </a>
+            <Link
+              to="/custom-pet"
+              className="text-[13px] font-bold text-gray-600 dark:text-gray-300 hover:text-[#111827] dark:hover:text-white transition-colors no-underline"
+            >
+              {t('nav.docs')}
+            </Link>
           </nav>
 
           <div className="flex items-center gap-1.5 sm:gap-3">
@@ -216,18 +222,19 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
               {langOpen && (
                 <div className="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl p-2 z-[60]">
                   {languages.map((lng) => (
-                    <button
+                    <a
                       key={lng.code}
-                      onClick={() => changeLanguage(lng.code)}
+                      href={`?lang=${lng.code}`}
+                      onClick={(e) => { e.preventDefault(); changeLanguage(lng.code); }}
                       aria-label={`Switch to ${lng.label}`}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-colors ${i18n.language === lng.code
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-colors no-underline ${i18n.language === lng.code
                           ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
                           : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white'
                         }`}
                     >
                       <span>{lng.label}</span>
                       {i18n.language === lng.code && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />}
-                    </button>
+                    </a>
                   ))}
                 </div>
               )}
@@ -251,8 +258,10 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
               {menuOpen ? <X size={16} /> : <Menu size={16} />}
             </button>
 
-            <button
-              onClick={() => {
+            <a
+              href="#download"
+              onClick={(e) => {
+                e.preventDefault();
                 if (location.pathname !== '/') {
                   navigate('/');
                   setTimeout(() => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -261,12 +270,12 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
                 }
               }}
               aria-label="Download MiniPet"
-              className="btn-dark !rounded-xl !py-1.5 !px-3 sm:!px-4 !text-[11px] sm:!text-[13px] pointer-events-auto flex items-center gap-1.5"
+              className="btn-dark !rounded-xl !py-1.5 !px-3 sm:!px-4 !text-[11px] sm:!text-[13px] pointer-events-auto flex items-center gap-1.5 no-underline"
             >
               <Download size={14} className="sm:hidden" />
               <span className="hidden xs:inline">{t('nav.download')}</span>
               <span className="xs:hidden">Get</span>
-            </button>
+            </a>
           </div>
         </div>
 
@@ -274,22 +283,27 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
         {menuOpen && (
           <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl shadow-2xl p-4 pointer-events-auto mx-4 z-[60]">
             <div className="flex flex-col gap-2">
-              {[t('nav.features'), t('nav.docs')].map((l) => (
-                <button
-                  key={l}
-                  onClick={() => handleNavClick(l === t('nav.docs') ? 'Custom Pets' : 'Features')}
-                  className="w-full text-left px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all border-none bg-transparent cursor-pointer"
-                >
-                  {l}
-                </button>
-              ))}
+              <a
+                href="#features"
+                onClick={(e) => { e.preventDefault(); setMenuOpen(false); handleNavClick('Features'); }}
+                className="w-full text-left px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
+              >
+                {t('nav.features')}
+              </a>
+              <Link
+                to="/custom-pet"
+                onClick={() => setMenuOpen(false)}
+                className="w-full text-left px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
+              >
+                {t('nav.docs')}
+              </Link>
               <div className="h-px bg-gray-100 dark:bg-gray-800 my-2 mx-5" />
               <a
                 href="https://github.com/helloquocbao/mini-pet"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit our GitHub repository"
-                className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
+                className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
               >
                 <FaGithub size={18} />
                 <span>GitHub</span>
@@ -316,17 +330,18 @@ function Hero() {
               {t('hero.title2')}<br />
               {t('hero.title3')}
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 text-[14px] sm:text-[15px] leading-relaxed mb-6 max-w-sm mx-auto md:mx-0">
+            <p className="text-gray-600 dark:text-gray-400 text-[14px] sm:text-[15px] leading-relaxed mb-6 max-w-sm mx-auto md:mx-0">
               {t('hero.desc')}
             </p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-5">
-              <button
-                onClick={() => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-dark !rounded-2xl !py-2.5 !px-6 !text-[13.5px]"
+              <a
+                href="#download"
+                onClick={(e) => { e.preventDefault(); document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="btn-dark !rounded-2xl !py-2.5 !px-6 !text-[13.5px] no-underline"
               >
                 <Download size={16} /> {t('hero.getFree')}
-              </button>
+              </a>
               <a
                 href="https://github.com/helloquocbao/mini-pet"
                 target="_blank"
@@ -338,7 +353,7 @@ function Hero() {
               </a>
             </div>
 
-            <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-[12px] font-semibold text-gray-400">
+            <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-[12px] font-semibold text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1.5">
                 <Check size={13} className="text-green-500" /> {t('hero.noAds')}
               </span>
@@ -384,7 +399,7 @@ function Features() {
           <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-[900] text-[#111827] dark:text-white tracking-tight leading-tight mb-3">
             {t('features.badge')}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto leading-relaxed">
             {t('features.desc')}
           </p>
         </div>
@@ -439,7 +454,7 @@ function Features() {
               {/* Text always at bottom */}
               <div className="p-4 md:p-6 border-t border-gray-100/80">
                 <h3 className="text-[15px] font-extrabold text-[#111827] mb-1.5">{t('features.pomodoro.title')}</h3>
-                <p className="text-[13px] text-gray-500 leading-relaxed max-w-sm">
+                <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm">
                   {t('features.pomodoro.desc')}
                 </p>
               </div>
@@ -486,7 +501,7 @@ function Features() {
               </div>
               <div className="p-6 w-2/3">
                 <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.eating.title')}</h3>
-                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed">
                   {t('features.eating.desc')}
                 </p>
               </div>
@@ -507,7 +522,7 @@ function Features() {
               </div>
               <div className="p-6 w-2/3">
                 <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.custom.title')}</h3>
-                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed">
                   {t('features.custom.desc')}
                 </p>
               </div>
@@ -560,7 +575,7 @@ function DownloadSection() {
           <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-[900] text-[#111827] dark:text-white tracking-tight mb-3">
             {t('download.title')}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-gray-400 text-[15px] sm:text-[16px] max-w-md mx-auto">
             {t('download.desc')}
           </p>
         </div>
@@ -578,10 +593,10 @@ function DownloadSection() {
 
               <div className="w-full pt-6 border-t border-gray-100 dark:border-gray-800">
                 <a
-                  href={d.disabled ? undefined : d.link}
+                  href={d.disabled ? "#download" : d.link}
                   aria-label={d.disabled ? `Coming Soon: MiniPet for ${d.platform} (${d.ext})` : `Download MiniPet for ${d.platform} (${d.ext})`}
-                  className={`btn-dark w-full !justify-center !py-3 !rounded-2xl flex items-center gap-2 group/btn ${d.disabled ? 'opacity-40 pointer-events-none grayscale select-none' : ''}`}
-                  onClick={(e) => d.disabled && e.preventDefault()}
+                  className={`btn-dark w-full !justify-center !py-3 !rounded-2xl flex items-center gap-2 group/btn no-underline ${d.disabled ? 'opacity-40 grayscale select-none' : ''}`}
+                  onClick={(e) => { if (d.disabled) e.preventDefault(); }}
                 >
                   <Download size={18} className={d.disabled ? '' : 'group-hover/btn:translate-y-0.5 transition-transform'} />
                   {d.disabled ? 'Coming Soon' : `${t('download.btn')} ${d.ext}`}
@@ -632,7 +647,7 @@ function DownloadSection() {
                     <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                   </div>
                   <div className="font-mono text-[12.5px] leading-relaxed">
-                    <div className="text-gray-500 mb-2"># {t('download.troubleshooting.macTerminalStep').split(':')[0]}:</div>
+                    <div className="text-slate-400 mb-2"># {t('download.troubleshooting.macTerminalStep').split(':')[0]}:</div>
                     <div className="flex items-start gap-2">
                       <span className="text-emerald-400 font-bold shrink-0">$</span>
                       <code className="text-indigo-200 break-all">
@@ -686,7 +701,7 @@ function Footer() {
           </div>
 
           {/* Copyright */}
-          <p className="text-[12px] text-gray-300 dark:text-gray-500 font-semibold flex-shrink-0">
+          <p className="text-[12px] text-gray-500 dark:text-gray-400 font-semibold flex-shrink-0">
             © 2026 MiniPet — {t('footer.copyright')}
           </p>
         </div>
@@ -735,7 +750,7 @@ function CustomPetPage() {
                   </div>
                   <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
                     <div className="text-indigo-600 dark:text-indigo-400 font-mono font-bold mb-1">spritesheet.webp</div>
-                    <div className="text-xs text-gray-400 uppercase font-bold tracking-wider">Animations</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Animations</div>
                   </div>
                 </div>
               </div>
@@ -773,7 +788,7 @@ function CustomPetPage() {
                       <tr key={idx} className="border-b border-gray-200/40 dark:border-gray-700/40 hover:bg-white dark:hover:bg-gray-800/50 transition-colors">
                         <td className="p-5 font-mono text-center font-bold text-indigo-600 dark:text-indigo-400 bg-gray-100/30 dark:bg-gray-800/20">{row.row}</td>
                         <td className="p-5 font-bold text-[#111827] dark:text-white">{row.label}</td>
-                        <td className="p-5 hidden sm:table-cell text-gray-500 dark:text-gray-400">{row.action}</td>
+                        <td className="p-5 hidden sm:table-cell text-gray-600 dark:text-gray-400">{row.action}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -810,7 +825,7 @@ function CustomPetPage() {
                     <span className="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-base font-bold shadow-lg shadow-orange-500/20">4</span>
                     {t('docs.section4')}
                   </h2>
-                  <p className="text-gray-500 dark:text-gray-400 mt-2">{t('docs.section4_desc')}</p>
+                  <p className="text-gray-600 dark:text-gray-400 mt-2">{t('docs.section4_desc')}</p>
                 </div>
                 <span className="w-fit px-4 py-1.5 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-[12px] font-black uppercase tracking-widest rounded-xl border border-orange-200/50 dark:border-orange-500/20">
                   Reference Asset
@@ -910,7 +925,7 @@ function AppContent() {
         <div className="blob blob-3 opacity-40 dark:opacity-20" />
       </div>
 
-      <SEO />
+      <SEO isDark={isDark} />
       <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
       <Routes>

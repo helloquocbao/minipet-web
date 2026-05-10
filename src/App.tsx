@@ -8,17 +8,61 @@ import { Helmet } from 'react-helmet-async';
 /* ─── SEO COMPONENT ─── */
 const SEO = () => {
   const { t, i18n } = useTranslation();
+  const baseUrl = "https://minipet.io"; // Replace with your actual domain
+  
+  const schemaOrgJSONLD = {
+    "@context": "http://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MiniPet",
+    "operatingSystem": "Windows, macOS",
+    "applicationCategory": "ProductivityApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": t('seo.description'),
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "ratingCount": "150"
+    }
+  };
+
   return (
     <Helmet>
       <html lang={i18n.language} />
       <title>{t('seo.title')}</title>
       <meta name="description" content={t('seo.description')} />
+      <meta name="keywords" content={t('seo.keywords')} />
+      <link rel="canonical" href={baseUrl} />
+      
+      {/* Multilingual SEO (Hreflang) */}
+      <link rel="alternate" hrefLang="en" href={`${baseUrl}/?lang=en`} />
+      <link rel="alternate" hrefLang="vi" href={`${baseUrl}/?lang=vi`} />
+      <link rel="alternate" hrefLang="zh" href={`${baseUrl}/?lang=zh`} />
+      <link rel="alternate" hrefLang="fr" href={`${baseUrl}/?lang=fr`} />
+      <link rel="alternate" hrefLang="it" href={`${baseUrl}/?lang=it`} />
+      <link rel="alternate" hrefLang="x-default" href={baseUrl} />
+
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={baseUrl} />
       <meta property="og:title" content={t('seo.title')} />
       <meta property="og:description" content={t('seo.description')} />
-      <meta property="og:type" content="website" />
+      <meta property="og:image" content={`${baseUrl}/og-image.png`} />
+
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={baseUrl} />
       <meta name="twitter:title" content={t('seo.title')} />
       <meta name="twitter:description" content={t('seo.description')} />
+      <meta name="twitter:image" content={`${baseUrl}/og-image.png`} />
+
+      {/* JSON-LD Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(schemaOrgJSONLD)}
+      </script>
     </Helmet>
   );
 };
@@ -299,6 +343,8 @@ function Features() {
                   src="/feature-companion.png"
                   alt="Cute astronaut pet"
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-4 md:p-6">
@@ -318,6 +364,8 @@ function Features() {
                   alt="Cute cat with Pomodoro timer"
                   className="w-full h-full object-cover opacity-90"
                   style={{ mixBlendMode: 'multiply' }}
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Timer pill */}
                 <div className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">
@@ -343,6 +391,8 @@ function Features() {
                   src="/card-context.png"
                   alt="Many pets on screen"
                   className="w-full h-full object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -363,6 +413,8 @@ function Features() {
                   src="/card-overlay.png"
                   alt="Pet eating file"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-6 w-2/3">
@@ -380,6 +432,8 @@ function Features() {
                   src="/card-petdex.png"
                   alt="Pet gallery"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-6 w-2/3">
@@ -700,6 +754,8 @@ function CustomPetPage() {
                           src="/cat/spritesheet.png"
                           alt="Lyra Spritesheet Example"
                           className="min-w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.01]"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>

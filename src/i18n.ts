@@ -7,7 +7,8 @@ const resources = {
     translation: {
       seo: {
         title: 'MiniPet - Your Cute Desktop Pixel Companion',
-        description: 'MiniPet is a lightweight desktop app that brings cute pixel friends to your workspace. Boost productivity with Pomodoro and enjoy interactive desktop pets.'
+        description: 'MiniPet is a lightweight desktop app that brings cute pixel friends to your workspace. Boost productivity with Pomodoro and enjoy interactive desktop pets.',
+        keywords: 'minipet, mini pet, desktop pet, pixel pet, pomodoro timer, desktop companion, virtual pet, screen pet, interactive pet'
       },
       nav: {
         features: 'Features',
@@ -104,7 +105,8 @@ const resources = {
     translation: {
       seo: {
         title: 'MiniPet - Những người bạn Pixel đáng yêu trên máy tính',
-        description: 'MiniPet là ứng dụng máy tính nhẹ nhàng mang những người bạn pixel đến không gian làm việc của bạn. Tăng năng suất với Pomodoro và tận hưởng niềm vui với thú cưng máy tính.'
+        description: 'MiniPet là ứng dụng máy tính nhẹ nhàng mang những người bạn pixel đến không gian làm việc của bạn. Tăng năng suất với Pomodoro và tận hưởng niềm vui với thú cưng máy tính.',
+        keywords: 'minipet, mini pet, thú cưng máy tính, pet máy tính, pixel pet, pomodoro, bạn đồng hành máy tính, thú cưng ảo'
       },
       nav: {
         features: 'Tính năng',

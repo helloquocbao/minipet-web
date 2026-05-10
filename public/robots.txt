@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://minipet.io/sitemap.xml
+Sitemap: https://www.minipet.xyz/sitemap.xml

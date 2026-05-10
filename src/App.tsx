@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 /* ─── SEO COMPONENT ─── */
 const SEO = () => {
   const { t, i18n } = useTranslation();
-  const baseUrl = "https://minipet.io"; // Replace with your actual domain
+  const baseUrl = "https://www.minipet.xyz";
   
   const schemaOrgJSONLD = {
     "@context": "http://schema.org",
@@ -37,6 +37,11 @@ const SEO = () => {
       <meta name="keywords" content={t('seo.keywords')} />
       <link rel="canonical" href={baseUrl} />
       
+      {/* Performance: Preconnect to Font Servers */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet" media="all" />
+
       {/* Multilingual SEO (Hreflang) */}
       <link rel="alternate" hrefLang="en" href={`${baseUrl}/?lang=en`} />
       <link rel="alternate" hrefLang="vi" href={`${baseUrl}/?lang=vi`} />
@@ -44,25 +49,56 @@ const SEO = () => {
       <link rel="alternate" hrefLang="fr" href={`${baseUrl}/?lang=fr`} />
       <link rel="alternate" hrefLang="it" href={`${baseUrl}/?lang=it`} />
       <link rel="alternate" hrefLang="x-default" href={baseUrl} />
+      
+      {/* Mobile Experience */}
+      <meta name="theme-color" content={i18n.language === 'dark' ? '#0f172a' : '#e8eeff'} />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+      {/* Performance: Preload Critical Assets */}
+      <link rel="preload" href="/cat/spritesheet.png" as="image" />
+      <link rel="preload" href="/icons/icon.png" as="image" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={baseUrl} />
       <meta property="og:title" content={t('seo.title')} />
       <meta property="og:description" content={t('seo.description')} />
-      <meta property="og:image" content={`${baseUrl}/og-image.png`} />
+      <meta property="og:image" content={`${baseUrl}/icons/icon.png`} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={baseUrl} />
       <meta name="twitter:title" content={t('seo.title')} />
       <meta name="twitter:description" content={t('seo.description')} />
-      <meta name="twitter:image" content={`${baseUrl}/og-image.png`} />
+      <meta name="twitter:image" content={`${baseUrl}/icons/icon.png`} />
 
       {/* JSON-LD Structured Data */}
       <script type="application/ld+json">
         {JSON.stringify(schemaOrgJSONLD)}
       </script>
+
+      {/* Global Performance Styles */}
+      <style>{`
+        section {
+          content-visibility: auto;
+          contain-intrinsic-size: 1px 500px;
+        }
+        section#hero {
+          content-visibility: visible;
+        }
+        .hero-orb {
+          will-change: transform, opacity;
+        }
+        img {
+          content-visibility: auto;
+          aspect-ratio: attr(width) / attr(height);
+          height: auto; /* Fallback for layout */
+        }
+        .cat-sprite-frame {
+          will-change: background-position;
+        }
+      `}</style>
     </Helmet>
   );
 };
@@ -132,10 +168,21 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
           {/* Logo */}
           <button
             onClick={() => navigate('/')}
+            aria-label="Back to home"
+            title="MiniPet Home"
             className="flex items-center gap-2 mr-auto cursor-pointer bg-transparent border-none p-0 group"
           >
             <div className="w-7 h-7 rounded-lg bg-[#111827] dark:bg-white flex items-center justify-center transition-transform group-hover:scale-105 overflow-hidden border border-white/10 shadow-sm">
-              <img src="/icons/icon.png" alt="MiniPet Logo" className="w-full h-full object-cover" />
+              <img 
+                src="/icons/icon.png" 
+                alt="MiniPet Logo" 
+                className="w-full h-full object-cover pixel-art" 
+                loading="eager"
+                width="28"
+                height="28"
+                /* @ts-ignore */
+                fetchpriority="high"
+              />
             </div>
             <span className="text-[13px] sm:text-[13.5px] font-extrabold text-[#111827] dark:text-white tracking-tight">MiniPet</span>
           </button>
@@ -146,7 +193,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
               <button
                 key={l}
                 onClick={() => handleNavClick(l === t('nav.docs') ? 'Custom Pets' : 'Features')}
-                className="text-[13px] font-bold text-gray-500 dark:text-gray-400 hover:text-[#111827] dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer p-0"
+                className="text-[13px] font-bold text-gray-600 dark:text-gray-300 hover:text-[#111827] dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer p-0"
               >
                 {l}
               </button>
@@ -158,11 +205,12 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
             <div className="relative" ref={langRef}>
               <button
                 onClick={() => setLangOpen(!langOpen)}
+                aria-label="Change language"
                 className="flex items-center gap-1.5 bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 px-2 sm:px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-gray-700/50 transition-all cursor-pointer group"
               >
-                <Globe size={13} className="text-gray-400 group-hover:text-indigo-500 transition-colors" />
-                <span className="text-[10px] sm:text-[11px] font-black text-gray-600 dark:text-gray-300">{currentLang.short}</span>
-                <ChevronDown size={10} className={`text-gray-400 transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+                <Globe size={13} className="text-gray-500 group-hover:text-indigo-500 transition-colors" />
+                <span className="text-[10px] sm:text-[11px] font-black text-gray-700 dark:text-gray-300">{currentLang.short}</span>
+                <ChevronDown size={10} className={`text-gray-500 transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {langOpen && (
@@ -171,9 +219,10 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
                     <button
                       key={lng.code}
                       onClick={() => changeLanguage(lng.code)}
+                      aria-label={`Switch to ${lng.label}`}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-colors ${i18n.language === lng.code
                           ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
-                          : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white'
                         }`}
                     >
                       <span>{lng.label}</span>
@@ -187,6 +236,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-none cursor-pointer"
             >
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -195,6 +245,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle mobile menu"
               className="lg:hidden w-8 h-8 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-none cursor-pointer"
             >
               {menuOpen ? <X size={16} /> : <Menu size={16} />}
@@ -209,6 +260,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
                   document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
+              aria-label="Download MiniPet"
               className="btn-dark !rounded-xl !py-1.5 !px-3 sm:!px-4 !text-[11px] sm:!text-[13px] pointer-events-auto flex items-center gap-1.5"
             >
               <Download size={14} className="sm:hidden" />
@@ -235,11 +287,12 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
               <a
                 href="https://github.com/helloquocbao/mini-pet"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label="Visit our GitHub repository"
                 className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-[14px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[#111827] dark:hover:text-white transition-all no-underline"
               >
                 <FaGithub size={18} />
-                GitHub Repository
+                <span>GitHub</span>
               </a>
             </div>
           </div>
@@ -253,7 +306,7 @@ function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => v
 function Hero() {
   const { t } = useTranslation();
   return (
-    <section className="pt-20 pb-10 md:pt-32 md:pb-20 overflow-hidden relative">
+    <section id="hero" className="pt-20 pb-10 md:pt-32 md:pb-20 overflow-hidden relative">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center">
           {/* Left copy */}
@@ -277,7 +330,8 @@ function Hero() {
               <a
                 href="https://github.com/helloquocbao/mini-pet"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label="View MiniPet source code on GitHub"
                 className="btn-ghost !rounded-2xl !py-2.5 !px-6 !text-[13.5px]"
               >
                 <FaGithub size={16} /> {t('hero.source')}
@@ -286,13 +340,13 @@ function Hero() {
 
             <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-[12px] font-semibold text-gray-400">
               <span className="flex items-center gap-1.5">
-                <Check size={13} className="text-green-500" /> No Ads
+                <Check size={13} className="text-green-500" /> {t('hero.noAds')}
               </span>
               <span className="flex items-center gap-1.5">
-                <Check size={13} className="text-green-500" /> No Account Needed
+                <Check size={13} className="text-green-500" /> {t('hero.noAccount')}
               </span>
               <span className="flex items-center gap-1.5">
-                <Check size={13} className="text-green-500" /> 100% Privacy
+                <Check size={13} className="text-green-500" /> {t('hero.privacy')}
               </span>
             </div>
           </div>
@@ -305,7 +359,12 @@ function Hero() {
             {/* Circular gradient orb */}
             <div className="hero-orb z-10">
               {/* Animated Cat Sprite Frame - TOP LAYER */}
-              <div className="cat-sprite-frame relative z-20 transition-transform duration-500 hover:scale-110" />
+              <div 
+                className="cat-sprite-frame relative z-20 transition-transform duration-500 hover:scale-110" 
+                style={{ willChange: 'transform' }} 
+                role="img"
+                aria-label="Animated pixel art cat companion"
+              />
             </div>
           </div>
         </div>
@@ -341,15 +400,17 @@ function Features() {
               >
                 <img
                   src="/feature-companion.png"
-                  alt="Cute astronaut pet"
+                  alt="Live Desktop Companion featuring a cute pet"
                   className="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
+                  width="400"
+                  height="240"
                 />
               </div>
               <div className="p-4 md:p-6">
                 <h3 className="text-[17px] font-extrabold text-[#111827] dark:text-white mb-1.5">{t('features.companion.title')}</h3>
-                <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm">
+                <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm">
                   {t('features.companion.desc')}
                 </p>
               </div>
@@ -361,11 +422,13 @@ function Features() {
               <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-rose-50 to-orange-50" style={{ minHeight: 160 }}>
                 <img
                   src="/card-pomodoro.png"
-                  alt="Cute cat with Pomodoro timer"
-                  className="w-full h-full object-cover opacity-90"
+                  alt="Pomodoro Timer interface with a focused pet"
+                  className="w-full h-full object-cover pixel-art"
                   style={{ mixBlendMode: 'multiply' }}
                   loading="lazy"
                   decoding="async"
+                  width="400"
+                  height="240"
                 />
                 {/* Timer pill */}
                 <div className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">
@@ -389,10 +452,12 @@ function Features() {
               <div className="absolute inset-0 flex items-center justify-center p-8 transition-transform duration-700 group-hover:scale-110">
                 <img
                   src="/card-context.png"
-                  alt="Many pets on screen"
+                  alt="Multiple MiniPet characters interacting on a desktop"
                   className="w-full h-full object-contain"
                   loading="lazy"
                   decoding="async"
+                  width="300"
+                  height="300"
                 />
               </div>
             </div>
@@ -411,10 +476,12 @@ function Features() {
               <div className="w-1/3 h-full relative overflow-hidden flex items-center justify-center">
                 <img
                   src="/card-overlay.png"
-                  alt="Pet eating file"
+                  alt="Interactive file eating system illustration"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110"
                   loading="lazy"
                   decoding="async"
+                  width="200"
+                  height="200"
                 />
               </div>
               <div className="p-6 w-2/3">
@@ -430,10 +497,12 @@ function Features() {
               <div className="w-1/3 h-full relative overflow-hidden flex items-center justify-center">
                 <img
                   src="/card-petdex.png"
-                  alt="Pet gallery"
+                  alt="PetDex library showing various custom pets"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:-rotate-3 group-hover:scale-110"
                   loading="lazy"
                   decoding="async"
+                  width="200"
+                  height="200"
                 />
               </div>
               <div className="p-6 w-2/3">
@@ -468,9 +537,10 @@ function DownloadSection() {
       icon: <FaWindows size={28} />,
       version: 'v1.0.0',
       ext: '.exe',
-      link: 'https://github.com/helloquocbao/mini-pet/releases/download/v1.0.0/MiniPet-v1.0.0-Setup.exe',
+      link: '#',
       desc: t('download.winExeDesc'),
-      color: 'bg-blue-50 dark:bg-blue-900/20'
+      color: 'bg-blue-50 dark:bg-blue-900/20',
+      disabled: true
     },
     {
       platform: 'Windows',
@@ -508,11 +578,13 @@ function DownloadSection() {
 
               <div className="w-full pt-6 border-t border-gray-100 dark:border-gray-800">
                 <a
-                  href={d.link}
-                  className="btn-dark w-full !justify-center !py-3 !rounded-2xl flex items-center gap-2 group/btn"
+                  href={d.disabled ? undefined : d.link}
+                  aria-label={d.disabled ? `Coming Soon: MiniPet for ${d.platform} (${d.ext})` : `Download MiniPet for ${d.platform} (${d.ext})`}
+                  className={`btn-dark w-full !justify-center !py-3 !rounded-2xl flex items-center gap-2 group/btn ${d.disabled ? 'opacity-40 pointer-events-none grayscale select-none' : ''}`}
+                  onClick={(e) => d.disabled && e.preventDefault()}
                 >
-                  <Download size={18} className="group-hover/btn:translate-y-0.5 transition-transform" />
-                  {t('download.btn')} {d.ext}
+                  <Download size={18} className={d.disabled ? '' : 'group-hover/btn:translate-y-0.5 transition-transform'} />
+                  {d.disabled ? 'Coming Soon' : `${t('download.btn')} ${d.ext}`}
                 </a>
                 <div className="mt-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
                   Version {d.version}
@@ -588,7 +660,7 @@ function Footer() {
           {/* Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#111827] dark:bg-white flex items-center justify-center overflow-hidden">
-              <img src="/icons/icon.png" alt="MiniPet Logo" className="w-full h-full object-cover" />
+              <img src="/icons/icon.png" alt="MiniPet Logo Small" className="w-full h-full object-cover pixel-art" width="32" height="32" loading="lazy" decoding="async" />
             </div>
             <span className="text-[15px] font-black text-[#111827] dark:text-white tracking-tight">MiniPet</span>
           </div>
@@ -598,7 +670,8 @@ function Footer() {
             <a
               href="https://github.com/helloquocbao/mini-pet"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
+              aria-label="Visit our GitHub repository"
               className="text-gray-400 hover:text-[#111827] dark:hover:text-white transition-all hover:scale-110"
             >
               <FaGithub size={20} />
@@ -754,6 +827,8 @@ function CustomPetPage() {
                           src="/cat/spritesheet.png"
                           alt="Lyra Spritesheet Example"
                           className="min-w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.01]"
+                          width="1856"
+                          height="2262"
                           loading="lazy"
                           decoding="async"
                         />

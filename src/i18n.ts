@@ -8,7 +8,7 @@ const resources = {
       seo: {
         title: 'MiniPet - Your Cute Desktop Pixel Companion',
         description: 'MiniPet is a lightweight desktop app that brings cute pixel friends to your workspace. Boost productivity with Pomodoro and enjoy interactive desktop pets.',
-        keywords: 'minipet, mini pet, desktop pet, pixel pet, pomodoro timer, desktop companion, virtual pet, screen pet, interactive pet'
+        keywords: 'minipet, minipets, mini pet, mini pets, mini pet app, mini pet apps, virtual pet, qbao, desktop pet, pixel pet, pomodoro timer, desktop companion, screen pet, interactive pet, minipet official, minipet website'
       },
       nav: {
         features: 'Features',
@@ -21,7 +21,10 @@ const resources = {
         title3: 'companions.',
         desc: 'MiniPet is a lightweight desktop app that brings cute pixel friends to your workspace. They walk, talk, and even "eat" your unwanted files while you work.',
         getFree: 'Get MiniPet Free',
-        source: 'Source Code'
+        source: 'Source Code',
+        noAds: 'No Ads',
+        noAccount: 'No Account Needed',
+        privacy: '100% Privacy'
       },
       features: {
         badge: 'Small companion, big joy',
@@ -106,7 +109,7 @@ const resources = {
       seo: {
         title: 'MiniPet - Những người bạn Pixel đáng yêu trên máy tính',
         description: 'MiniPet là ứng dụng máy tính nhẹ nhàng mang những người bạn pixel đến không gian làm việc của bạn. Tăng năng suất với Pomodoro và tận hưởng niềm vui với thú cưng máy tính.',
-        keywords: 'minipet, mini pet, thú cưng máy tính, pet máy tính, pixel pet, pomodoro, bạn đồng hành máy tính, thú cưng ảo'
+        keywords: 'minipet, minipets, mini pet, mini pets, mini pet app, mini pet apps, virtual pet, qbao, thú cưng máy tính, pet máy tính, pixel pet, pomodoro, bạn đồng hành máy tính, thú cưng ảo, minipet chính thức'
       },
       nav: {
         features: 'Tính năng',
@@ -119,7 +122,10 @@ const resources = {
         title3: 'máy tính mới.',
         desc: 'MiniPet là ứng dụng máy tính nhẹ nhàng mang những người bạn pixel đáng yêu đến không gian làm việc của bạn. Chúng biết đi, nói và thậm chí "ăn" những file rác của bạn.',
         getFree: 'Tải MiniPet miễn phí',
-        source: 'Mã nguồn'
+        source: 'Mã nguồn',
+        noAds: 'Không quảng cáo',
+        noAccount: 'Không cần tài khoản',
+        privacy: 'Riêng tư 100%'
       },
       features: {
         badge: 'Bạn nhỏ, niềm vui lớn',
@@ -193,7 +199,7 @@ const resources = {
         json_config: 'Cấu hình pet.json'
       },
       footer: {
-        disclaimer: 'Disclaimer:',
+        disclaimer: 'Miễn trừ trách nhiệm:',
         disclaimer_text: 'Ứng dụng này chỉ cung cấp công cụ; chúng tôi không sở hữu và không chịu trách nhiệm về nội dung/hình ảnh do người dùng tải lên hoặc liên kết từ các nguồn bên ngoài.',
         copyright: 'Dự án Mã nguồn mở.'
       }
@@ -203,7 +209,8 @@ const resources = {
     translation: {
       seo: {
         title: 'MiniPet - 您的可爱桌面像素伙伴',
-        description: 'MiniPet 是一款轻量级的桌面应用程序，可为您的工作空间带来可爱的像素朋友。通过番茄钟提高生产力，享受互动的桌面宠物。'
+        description: 'MiniPet 是一款轻量级的桌面应用程序，可为您的工作空间带来可爱的像素朋友。通过番茄钟提高生产力，享受互动的桌面宠物。',
+        keywords: 'minipet, minipets, mini pet, mini pets, mini pet app, mini pet apps, virtual pet, qbao, 桌面宠物, 像素宠物, 番茄钟, 桌面伙伴, 虚拟宠物, 互动宠物, minipet 官方'
       },
       nav: {
         features: '功能',
@@ -216,7 +223,10 @@ const resources = {
         title3: '伙伴。',
         desc: 'MiniPet 是一款轻量级的桌面应用程序，可为您的工作空间带来可爱的像素朋友。它们会走、会说，甚至会在您工作时“吃掉”您不需要的文件。',
         getFree: '免费获取 MiniPet',
-        source: '源代码'
+        source: '源代码',
+        noAds: '无广告',
+        noAccount: '无需账户',
+        privacy: '100% 隐私保护'
       },
       features: {
         badge: '小伴侣，大快乐',
@@ -292,7 +302,8 @@ const resources = {
     translation: {
       seo: {
         title: 'MiniPet - I Tuoi Simpatici Amici Pixel per Desktop',
-        description: 'MiniPet è un\'app desktop leggera che porta simpatici amici pixel nel tuo spazio di lavoro. Aumenta la produttività con Pomodoro e goditi i pet interattivi.'
+        description: 'MiniPet è un\'app desktop leggera che porta simpatici amici pixel nel tuo spazio di lavoro. Aumenta la produttività con Pomodoro e goditi i pet interattivi.',
+        keywords: 'minipet, minipets, mini pet, mini pets, mini pet app, mini pet apps, virtual pet, helloquocbao, qbao, pet desktop, pixel pet, timer pomodoro, compagno desktop, pet virtuale, pet interattivo, minipet ufficiale'
       },
       nav: {
         features: 'Caratteristiche',
@@ -305,7 +316,10 @@ const resources = {
         title3: 'di desktop.',
         desc: 'MiniPet è un\'app desktop leggera che porta simpatici amici pixel nel tuo spazio di lavoro. Camminano, parlano e "mangiano" persino i tuoi file indesiderati mentre lavori.',
         getFree: 'Ottieni MiniPet Gratis',
-        source: 'Codice Sorgente'
+        source: 'Codice Sorgente',
+        noAds: 'Senza Annunci',
+        noAccount: 'Nessun Account',
+        privacy: 'Privacy 100%'
       },
       features: {
         badge: 'Piccolo compagno, grande gioia',
@@ -372,7 +386,7 @@ const resources = {
       },
       footer: {
         disclaimer: 'Dichiarazione di non responsabilità:',
-        disclaimer_text: 'Questa applicazione fornisce solo strumenti; không sở hữu và không chịu trách nhiệm về nội dung/hình ảnh do người dùng tải lên hoặc liên kết từ các nguồn bên ngoài.',
+        disclaimer_text: 'Questa applicazione fornisce solo strumenti; non siamo i proprietari e non siamo responsabili per i contenuti o le immagini caricate dagli utenti o collegate da fonti esterne.',
         copyright: 'Progetto Open Source.'
       }
     }
@@ -381,7 +395,8 @@ const resources = {
     translation: {
       seo: {
         title: 'MiniPet - Vos Compagnons Pixel Adorables pour Bureau',
-        description: 'MiniPet est une application de bureau légère qui apporte de mignons amis pixel à votre espace de travail. Boostez votre productivité với Pomodoro.'
+        description: 'MiniPet est une application de bureau légère qui apporte de mignons amis pixel à votre espace de travail. Boostez votre productivité với Pomodoro.',
+        keywords: 'minipet, minipets, mini pet, mini pets, mini pet app, mini pet apps, virtual pet, helloquocbao, qbao, pet de bureau, pixel pet, minuteur pomodoro, compagnon de bureau, pet virtuel, pet interactif, minipet officiel'
       },
       nav: {
         features: 'Fonctionnalités',
@@ -394,7 +409,10 @@ const resources = {
         title3: 'de bureau.',
         desc: 'MiniPet est une application de bureau légère qui apporte de mignons amis pixel à votre espace de travail. Ils marchent, parlent et "mangent" même vos fichiers indésirables pendant que vous travaillez.',
         getFree: 'Obtenir MiniPet Gratuitement',
-        source: 'Code Source'
+        source: 'Code Source',
+        noAds: 'Sans Pub',
+        noAccount: 'Sans Compte',
+        privacy: '100% Privé'
       },
       features: {
         badge: 'Petit compagnon, grande joie',
@@ -461,7 +479,7 @@ const resources = {
       },
       footer: {
         disclaimer: 'Clause de non-responsabilité :',
-        disclaimer_text: 'Cette application ne fournit que des outils ; nous ne possédons pas và ne sommes pas responsables du contenu/des images téléchargés par les utilisateurs ou liés à partir de sources externes.',
+        disclaimer_text: 'Cette application ne fournit que des outils ; nous ne possédons pas et ne sommes pas responsables du contenu ou des images téléchargés par les utilisateurs ou liés à partir de sources externes.',
         copyright: 'Projet Open Source.'
       }
     }

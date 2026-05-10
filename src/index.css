@@ -125,6 +125,12 @@
   mix-blend-mode: multiply;
 }
 
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 @keyframes catCustomFlow {
   /* Row 1: 6 frames (Normal speed: ~2% per frame) */
   0% { background-position: 0% 0%; }
